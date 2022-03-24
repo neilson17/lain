@@ -48,7 +48,7 @@
         <div class="header-wrapper">
             <div class="header card">
                 <div class="account-info-header">
-                    <h3>Justin Bieber</h3>
+                    <h3>Centong Hitam</h3>
                     <p>Admin</p>
                 </div>
                 <img class="img-avatar h-100" src="https://i.pravatar.cc/300" alt="">
