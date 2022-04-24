@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Note;
 use Illuminate\Http\Request;
+use DB;
 
 class NoteController extends Controller
 {
@@ -81,5 +82,23 @@ class NoteController extends Controller
     public function destroy(Note $note)
     {
         //
+    }
+
+    public function showNote() {
+        $notes = DB::table('notes')->where('users_username', '=', 'admin')->get();
+
+        $public = $private = [];
+
+        foreach($notes as $n) {
+            if ($n->type == "public") array_push($public, $n);
+            else array_push($private, $n);
+        }
+
+        // echo "<pre>";
+        // print_r($public);
+        // echo "</pre>";
+
+        // $privateNotes = DB::table('notes')
+        dd($public);
     }
 }
