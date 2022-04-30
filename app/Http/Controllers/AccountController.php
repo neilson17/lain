@@ -15,7 +15,9 @@ class AccountController extends Controller
      */
     public function index()
     {
-        //
+        $data = Account::all();
+        return view('team.index', compact('data'));
+        // dd($data);
     }
 
     /**
@@ -25,7 +27,7 @@ class AccountController extends Controller
      */
     public function create()
     {
-        //
+        return view('team.add');
     }
 
     /**
@@ -36,7 +38,13 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = new Account();
+        $data->username = $request->get('username');
+        $data->name = $request->get('name');
+        $data->role = $request->get('role');
+        $data->photo_url = "default.jpg";
+        $data->save();
+        return redirect()->route('teams.index');
     }
 
     /**
@@ -106,5 +114,10 @@ class AccountController extends Controller
         // return response()->json(array(
         //     'msg' => $username
         // ), 200);
+    }
+
+    public function showAccount() {
+        $account = Account::all();
+        dd($account);
     }
 }

@@ -25,36 +25,35 @@ Route::get('/dashboard', function() {
     return view('dashboard/index');
 });
 
-Route::get('/team', function() {
-    return view('team/index');
-});
-
-Route::get('/team/edit', function() {
-    return view('team/edit');
-});
-
-Route::get('/team/add', function() {
-    return view('team/add');
-});
-
 Route::get('/client', function() {
     return view('client/index');
 });
 
-Route::get('/note', function() {
-    return view('note/index');
+Route::get('/client/detail', function() {
+    return view('client/detail');
 });
 
-Route::get('/note/add', function() {
-    return view('note/add');
-});
+Route::resource('notes', 'NoteController');
+Route::resource('teams', 'AccountController');
 
 Route::get('/note/detail', function() {
     return view('note/detail');
 });
 
-Route::get('/note/edit', function() {
-    return view('note/edit');
+Route::get('/todo', function() {
+    return view('todo/index');
+});
+
+Route::get('/todo/detail', function() {
+    return view('todo/detail');
+});
+
+Route::get('/todo/edit', function() {
+    return view('todo/edit');
+});
+
+Route::get('/todo/create', function() {
+    return view('todo/add');
 });
 
 Route::get('/login', function() {
@@ -69,3 +68,5 @@ Route::get('/login', function() {
 Route::post('api/login', 'AccountController@testpost')->name('api.login');
 
 Route::get('api/shownote', 'NoteController@showNote');
+
+Route::get('api/showaccount', 'AccountController@showAccount');

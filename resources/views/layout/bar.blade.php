@@ -22,7 +22,7 @@
                         <h3 class="text-list-sidebar">Dashboard</h3>
                     </div>
                 </a>
-                <a href="{{url('/team')}}" class="@yield('team-active')">
+                <a href="{{url('/teams')}}" class="@yield('team-active')">
                     <div class="sidebar-list-item d-flex">
                     <div class="icon-list-sidebar-wrapper">
                             <img src="{{asset('assets/icons/icon-2.png')}}" class="icon-list-sidebar" alt="">
@@ -46,7 +46,7 @@
                         <h3 class="text-list-sidebar">Client</h3>
                     </div>
                 </a>
-                <a href="{{url('/note')}}" class="@yield('note-active')">
+                <a href="/notes" class="@yield('note-active')">
                     <div class="sidebar-list-item d-flex">
                         <div class="icon-list-sidebar-wrapper">
                             <img src="{{asset('assets/icons/icon-5.png')}}" class="icon-list-sidebar" alt="">
