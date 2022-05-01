@@ -70,13 +70,14 @@
                     <option value="15">15 days</option>
                     <option value="30">30 days</option>
                 </select>
-                <a class="ml-10x font-14x" href="{{url('/dates')}}">See More ></a>
+                <a class="ml-10x font-14x" href="{{url('/date')}}">See More ></a>
             </div>
         </div>
         <div class="sidebar-list-wrapper d-flex">
             <a href="">
                 <div class="dashboard-list-item d-flex">
                     <div class="d-flex">
+                        <!-- kalo client idnya 1 tag img dibawah gausa dimasukkan -->
                         <img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt="">
                         <div class="ml-10x">
                             <p class="dashboard-item-header">Client Deadline</p>
@@ -90,7 +91,6 @@
             <a href="">
                 <div class="dashboard-list-item d-flex">
                     <div class="d-flex">
-                        <img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt="">
                         <div class="ml-10x">
                             <p class="dashboard-item-header">Client Deadline</p>
                             <p class="font-12x">Client Name</p>
@@ -130,7 +130,7 @@
                     <option value="15">15 days</option>
                     <option value="30">30 days</option>
                 </select>
-                <a class="ml-10x font-14x" href="{{url('/client')}}">See More ></a>
+                <a class="ml-10x font-14x" href="{{url('todos')}}">See More ></a>
             </div>
         </div>
         <a href="{{url('/todo/detail')}}">

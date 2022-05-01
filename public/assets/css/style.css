@@ -256,6 +256,14 @@ input[type="date"]{
 	border: 1px white solid;
 }
 
+input[type="datetime-local"]{
+	color:white;
+	font-family: Gilroy;
+	border-radius:10px;
+	background:none;
+	border: 1px white solid;
+}
+
 .input-text{
 	border-radius: 10px;
 	padding: 5px 10px;
@@ -356,6 +364,11 @@ option {
 .btn-normal {
 	background-color: white;
 	color: black;
+}
+
+.btn-progress {
+	background-color: rgb(31, 163, 27);
+	color: white;
 }
 
 .btn-warning {
@@ -503,6 +516,10 @@ progress::-webkit-progress-bar {
 
 .h-50x{
 	height: 50px;
+}
+
+.h-100x{
+	height: 100px;
 }
 
 .p-10x {

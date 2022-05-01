@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\ToDo;
 use Illuminate\Http\Request;
+use DB;
+use App\Account;
+use App\Client;
+use App\Tag;
 
 class ToDoController extends Controller
 {
@@ -14,7 +18,8 @@ class ToDoController extends Controller
      */
     public function index()
     {
-        //
+        $data = DB::table('todos as t')->join('clients as c', 't.clients_id', '=', 'c.id')->select('t.*', 'c.name as client_name')->get();
+        return view('todo.index', compact('data'));
     }
 
     /**
@@ -24,7 +29,10 @@ class ToDoController extends Controller
      */
     public function create()
     {
-        //
+        $client = Client::all();
+        $account = Account::all();
+        $tag = Tag::all();
+        return view('todo.add', compact('client', 'account', 'tag'));
     }
 
     /**

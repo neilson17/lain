@@ -28,22 +28,26 @@
             </select>
             <button class="btn pt-5x pb-5x ml-10x">Add</button>
         </div>
-        <h4 class="mt-10x">Tags</h4>
         <div class="d-flex mt-10x flex-wrap">
             <div class="position-relative">
-                <div class="dashboard-tag-item font-12x">Tag 1</div>
+                <div class="dashboard-tag-item font-12x item-align-center d-flex">
+                    <img src="https://i.pravatar.cc/300" class="img-avatar h-20x mr-10x" alt="">
+                    Neilson Soeratman
+                </div>
                 <span class="todo-tag-delete color-white text-align-center font-10x">x</span>
             </div>
             <div class="position-relative">
-                <div class="dashboard-tag-item font-12x">Tag 1</div>
+                <div class="dashboard-tag-item font-12x item-align-center d-flex">
+                    <img src="https://i.pravatar.cc/300" class="img-avatar h-20x mr-10x" alt="">
+                    Neilson Soeratman
+                </div>
                 <span class="todo-tag-delete color-white text-align-center font-10x">x</span>
             </div>
             <div class="position-relative">
-                <div class="dashboard-tag-item font-12x">Tag 1</div>
-                <span class="todo-tag-delete color-white text-align-center font-10x">x</span>
-            </div>
-            <div class="position-relative">
-                <div class="dashboard-tag-item font-12x">Tag 1</div>
+                <div class="dashboard-tag-item font-12x item-align-center d-flex">
+                    <img src="https://i.pravatar.cc/300" class="img-avatar h-20x mr-10x" alt="">
+                    Neilson Soeratman
+                </div>
                 <span class="todo-tag-delete color-white text-align-center font-10x">x</span>
             </div>
         </div>
@@ -58,7 +62,6 @@
             <input type="text" class="input-text ml-10x w-x">
             <button class="btn pt-5x pb-5x ml-10x">Create Tag</button>
         </div>
-        <h4 class="mt-10x">Tags</h4>
         <div class="d-flex mt-10x flex-wrap">
             <div class="position-relative">
                 <div class="dashboard-tag-item font-12x">Tag 1</div>

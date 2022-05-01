@@ -35,26 +35,28 @@ Route::get('/client/detail', function() {
 
 Route::resource('notes', 'NoteController');
 Route::resource('teams', 'AccountController');
+Route::resource('todos', 'ToDoController');
+Route::resource('date', 'DateController');
 
 Route::get('/note/detail', function() {
     return view('note/detail');
 });
 
-Route::get('/todo', function() {
-    return view('todo/index');
-});
+// Route::get('/date', function() {
+//     return view('date/index');
+// });
 
-Route::get('/todo/detail', function() {
-    return view('todo/detail');
-});
+// Route::get('/date/detail', function() {
+//     return view('date/detail');
+// });
 
-Route::get('/todo/edit', function() {
-    return view('todo/edit');
-});
+// Route::get('/date/create', function() {
+//     return view('date/add');
+// });
 
-Route::get('/todo/create', function() {
-    return view('todo/add');
-});
+// Route::get('/date/edit', function() {
+//     return view('date/edit');
+// });
 
 Route::get('/login', function() {
     return view('login/index');
