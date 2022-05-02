@@ -18,7 +18,7 @@
     <h3 class="ml-15x mt-15x mb-15x">My Note</h3>
     <div class="note-list-wrapper">
         @foreach($private as $note)
-            <a href="{{url('/notes/detail')}}">
+            <a href="{{ url('/notes/'.$note->id) }}">
                 <div class="card p-10x note-list-item">
                     <div class="d-flex justify-content-space-between item-align-center">
                         <div>
@@ -41,7 +41,7 @@
     <h3 class="ml-15x mt-15x mb-15x">Public Note</h3>
     <div class="note-list-wrapper">
         @foreach($public as $note)
-            <a href="{{url('/notes/detail')}}">
+        <a href="{{ url('/notes/'.$note->id) }}">
                 <div class="card p-10x note-list-item">
                     <div class="d-flex justify-content-space-between item-align-center">
                     <div>

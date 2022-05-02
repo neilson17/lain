@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Date;
+use App\Event;
 use Illuminate\Http\Request;
 use DB;
 use App\Client;
 
-class DateController extends Controller
+class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class DateController extends Controller
      */
     public function index()
     {
-        $data = DB::table('dates as d')->join('clients as c', 'd.clients_id', '=', 'c.id')->select('d.*', 'c.name as client_name', 'c.photo_url')->get();
-        return view('date.index', compact('data'));
+        $data = DB::table('events as e')->join('clients as c', 'e.clients_id', '=', 'c.id')->select('e.*', 'c.name as client_name', 'c.photo_url')->get();
+        return view('event.index', compact('data'));
     }
 
     /**
@@ -28,7 +28,7 @@ class DateController extends Controller
     public function create()
     {
         $client = Client::all();
-        return view('date.add', compact('client'));
+        return view('event.add', compact('client'));
     }
 
     /**
@@ -39,25 +39,26 @@ class DateController extends Controller
      */
     public function store(Request $request)
     {
-        // $data = new Date();
         $date = $request->get('date');
         $dates = explode("T", $date);        
         $date = date("Y-m-d H:i:s", strtotime($dates[0]." ".$dates[1]));
-        $data = new Date();
+        $data = new Event();
         $data->title = $request->get('title');
         $data->description = $request->get('description');
         $data->date = $date;
         $data->clients_id = $request->get('clients_id');
-        dd($data);
+        // dd($data);
+        $data->save();
+        return redirect()->route('events.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Date  $date
+     * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function show(Date $date)
+    public function show(Event $event)
     {
         //
     }
@@ -65,10 +66,10 @@ class DateController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Date  $date
+     * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function edit(Date $date)
+    public function edit(Event $event)
     {
         //
     }
@@ -77,10 +78,10 @@ class DateController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Date  $date
+     * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Date $date)
+    public function update(Request $request, Event $event)
     {
         //
     }
@@ -88,10 +89,10 @@ class DateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Date  $date
+     * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Date $date)
+    public function destroy(Event $event)
     {
         //
     }

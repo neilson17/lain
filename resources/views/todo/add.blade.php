@@ -12,7 +12,7 @@
         </div>
         <div class="d-flex item-align-center mt-10x">
             <p class="font-14px d-flex">Deadline</p>
-            <input type="date" class="ml-10x pt-5x pb-5x pl-10x pr-10x">
+            <input type="datetime-local" class="ml-10x pt-5x pb-5x pl-10x pr-10x">
             <p class="font-14px ml-15x d-flex">Client</p>
             <select class="ml-10x text-align-center h-30x pl-20x pr-20x" name="" id="">
                 <option value="">-</option>
@@ -58,29 +58,16 @@
         <div class="divider mt-15x mb-15x"></div>
         <div class="d-flex item-align-center h-30x">
             <p class="font-14px d-flex">Tag</p>
-            <select class="ml-10x text-align-center pl-20x pr-20x" name="" id="">
-                <option value="">-</option>
+            <select class="ml-10x text-align-center pl-20x pr-20x" name="" id="add-todo-add-tag-list">
                 @foreach($tag as $t)
                     <option value="{{ $t->id }}">{{ $t->name }}</option>
                 @endforeach
             </select>
-            <button class="btn pt-5x pb-5x ml-10x">Add</button>
+            <button class="btn pt-5x pb-5x ml-10x" id="add-todo-add-tag">Add</button>
             <input type="text" class="input-text ml-10x w-x">
             <button class="btn pt-5x pb-5x ml-10x">Create Tag</button>
         </div>
-        <div class="d-flex mt-10x flex-wrap">
-            <div class="position-relative">
-                <div class="dashboard-tag-item font-12x">Tag 1</div>
-                <span class="todo-tag-delete color-white text-align-center font-10x">x</span>
-            </div>
-            <div class="position-relative">
-                <div class="dashboard-tag-item font-12x">Tag 1</div>
-                <span class="todo-tag-delete color-white text-align-center font-10x">x</span>
-            </div>
-            <div class="position-relative">
-                <div class="dashboard-tag-item font-12x">Tag 1</div>
-                <span class="todo-tag-delete color-white text-align-center font-10x">x</span>
-            </div>
+        <div class="d-flex mt-10x flex-wrap" id="add-todo-tag-list">
             <div class="position-relative">
                 <div class="dashboard-tag-item font-12x">Tag 1</div>
                 <span class="todo-tag-delete color-white text-align-center font-10x">x</span>
@@ -90,4 +77,8 @@
     <div class="divider mt-15x mb-15x"></div>
     <textarea name="" id="" cols="30" rows="10" class="input-text w-100p mw-100p"  placeholder="Todo Description"></textarea>
 </div>
+@endsection
+
+@section('javascript')
+<script src="{{asset('assets/js/main.js')}}"></script>
 @endsection

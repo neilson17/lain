@@ -2,7 +2,7 @@
 
 @section('content')
 <h2 class="ml-20x">Add Event</h2>
-<form role="form" method="POST" action = "{{url('date')}}">
+<form role="form" method="POST" action = "{{url('events')}}">
 @csrf   
 <div class="card p-20x mt-15x">
     <div class="d-flex flex-dir-col">

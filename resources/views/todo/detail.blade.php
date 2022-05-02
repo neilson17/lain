@@ -4,8 +4,8 @@
 <div class="card p-20x">
     <div class="d-flex item-align-center justify-content-space-between">
         <div>
-            <h2>Todo Title</h2>
-            <p class="font-12x">Client name</p>
+            <h2>namee</h2>
+            <p class="font-12x"></p>
         </div>
         <div class="d-flex item-align-center">
             <p class="font-12x">Due 15 Apr 2022, 15.00</p>

@@ -15,4 +15,8 @@ class ToDo extends Model
     public function accounts() {
         return $this->belongsToMany('App\Account');
     }
+
+    public function client() {
+        return $this -> belongsTo('App\Client', 'clients_id');
+    }
 }

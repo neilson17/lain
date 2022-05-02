@@ -6,7 +6,7 @@
     <div class="d-flex">
         <input type="text" class="input-text-merged-button">
         <a class="btn-merged-input btn" href="">Search</a>
-        <a class="btn-normal btn ml-10x" href="">Add Client</a>
+        <a class="btn-normal btn ml-10x" href="{{url('/client/create')}}">Add Client</a>
     </div>
 </div>
 <a href="">

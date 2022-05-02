@@ -11,7 +11,7 @@
 </div>
 <div class="flex-dir-col d-flex w-100p">
     @foreach($data as $d)
-    <a href="{{url('/todo/detail')}}">
+    <a href="{{ url('/todos/'.$d->id) }}">
         <div class="dashboard-list-item d-flex">
             <div class="d-flex item-align-center w-70p">
                 <input type="checkbox">

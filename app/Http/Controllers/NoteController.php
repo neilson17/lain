@@ -73,7 +73,9 @@ class NoteController extends Controller
      */
     public function show(Note $note)
     {
-        //
+        $data = $note;
+        $client = $data->client;
+        return view('note.detail', compact('data', 'client'));
     }
 
     /**

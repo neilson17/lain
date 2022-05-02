@@ -1,7 +1,7 @@
 @extends('layout.bar')
 
 @section('content')
-<h2 class="ml-20x">Add Client</h2>
+<h2 class="ml-20x">Edit Client - Client Name</h2>
 <form action="">
     <div class="d-flex justify-content-space-evenly mt-15x">
         <div class="d-flex flex-dir-col">
@@ -40,7 +40,7 @@
             </div>
             <br>
             <p class="text-align-right h-40x">
-                <a class="ml-15x btn btn-normal d-inline-flex" href="">Save</a>
+                <a class="ml-15x btn btn-normal d-inline-flex" href="">Save Changes</a>
             </p>
         </div>
     </div>

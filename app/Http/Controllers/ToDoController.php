@@ -18,7 +18,8 @@ class ToDoController extends Controller
      */
     public function index()
     {
-        $data = DB::table('todos as t')->join('clients as c', 't.clients_id', '=', 'c.id')->select('t.*', 'c.name as client_name')->get();
+        // $data = DB::table('todos as t')->join('clients as c', 't.clients_id', '=', 'c.id')->select('t.*', 'c.name as client_name')->get();
+        $data = ToDo::all();
         return view('todo.index', compact('data'));
     }
 
@@ -54,7 +55,15 @@ class ToDoController extends Controller
      */
     public function show(ToDo $toDo)
     {
-        //
+        $data = $toDo;
+        // $tag = $data->tags;
+        // $account = $data->accounts;
+        // $client = $data->client;
+
+        dd($data);
+        // return view('todo.detail');
+        // return view('todo.detail', compact('data'));
+        // return view('todo.detail', compact('data', 'tag', 'account', 'client'));
     }
 
     /**

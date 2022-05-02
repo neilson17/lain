@@ -6,7 +6,7 @@
     <div class="d-flex">
         <input type="text" class="input-text-merged-button">
         <a class="btn-merged-input btn" href="">Search</a>
-        <a class="btn-normal btn ml-10x" href="{{route('date.create')}}">Add Events</a>
+        <a class="btn-normal btn ml-10x" href="{{route('events.create')}}">Add Events</a>
     </div>
 </div>
 <div class="flex-dir-col d-flex w-100p">

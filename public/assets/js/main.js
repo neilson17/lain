@@ -27,3 +27,31 @@ $('#ajax-login').on('click', function () {
         }
         });
 });
+
+// ========================================================================
+// Add Todo
+// ========================================================================
+
+var taglist = [];
+$('#add-todo-add-tag').on('click', function(){
+    var tagval = $('#add-todo-add-tag-list').find(":selected").val();
+    if (tagval != null){
+        taglist.push(tagval);
+        var tagname = $('#add-todo-add-tag-list').find(":selected").text();
+        $('#add-todo-tag-list').append(`
+            <div class="position-relative">
+                <div class="dashboard-tag-item font-12x">${tagname}</div>
+                <span class="todo-tag-delete color-white text-align-center font-10x">x</span>
+            </div>
+        `);
+        $("#add-todo-add-tag-list option[value='" + tagval + "']").remove();
+        alert(taglist);
+    }
+    else {
+        alert('All tags have been used! Please create a new one!')
+    }
+});
+
+$(document).on('click', '.todo-tag-delete', function(){
+    $(this).parent().remove();
+});

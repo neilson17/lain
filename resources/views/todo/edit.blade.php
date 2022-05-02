@@ -12,7 +12,7 @@
         </div>
         <div class="d-flex item-align-center mt-10x">
             <p class="font-14px d-flex">Deadline</p>
-            <input type="date" class="ml-10x pt-5x pb-5x pl-10x pr-10x">
+            <input type="datetime-local" class="ml-10x pt-5x pb-5x pl-10x pr-10x">
             <p class="font-14px ml-15x d-flex">Client</p>
             <select class="ml-10x text-align-center h-30x pl-20x pr-20x" name="" id="">
                 <option value="">-</option>

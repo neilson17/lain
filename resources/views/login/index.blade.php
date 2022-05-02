@@ -7,21 +7,17 @@
 	<link href="{{asset('assets/css/style.css')}}" rel="stylesheet" type="text/css"/>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-<body class="login">
-<div class="container-login d-flex" style="background:#151D30">
-    <div class="container-image-login d-flex">
-    	<img src="assets/img/login.png" class="image-login">
-    </div>
-    <div class="container-text-login d-flex">
-        <img src="{{ asset('assets/img/vector.png')}}" class="logo-login">
-        <br>
-    	<b>Log In</b>
-    	<input class="login" type="text" name="username" placeholder="Username" id="textUsername">
-    	<input class="login" type="password" name="password" placeholder="Password" id="textPassword">
-    	<button id="ajax-login">Log In</button>
-    </div>
-	<div class="result"></div>
-</div> 
-<script src="{{asset('assets/js/main.js')}}"></script>
+<body class="w-100vw h-100vh d-flex justify-content-center item-align-center">
+	<img src="{{ asset('assets/img/vector.png')}}" class="mr-40x">
+	<div class="d-flex flex-dir-col">
+		<!-- <h2 class="text-align-center mt-20x">Login</h2> -->
+		<input type="text" class="input-text font-18x" name="username" placeholder="Username" id="textUsername">
+		<input type="password" class="input-text font-18x mt-15x" name="password" placeholder="Password" id="textPassword">
+		<p class="text-align-center">
+			<button class="btn btn-normal mt-30x pr-40x pl-40x" id="ajax-login">Log In</button>
+		</p>
+	</div>
+	
+	<script src="{{asset('assets/js/main.js')}}"></script>
 </body>
 </html>

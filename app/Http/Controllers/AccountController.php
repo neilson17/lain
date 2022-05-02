@@ -55,7 +55,8 @@ class AccountController extends Controller
      */
     public function show(Account $account)
     {
-        //
+        $acc = $account;
+        dd($acc);
     }
 
     /**
@@ -66,7 +67,7 @@ class AccountController extends Controller
      */
     public function edit(Account $account)
     {
-        //
+        return view('team.edit');
     }
 
     /**

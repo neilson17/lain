@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="dashboard-page-content w-100p h-100p">
-    <div class="card revenue-dashboard p-20x">
+    <div class="card p-20x">
         <h3>Revenue</h3>
     </div>
     <div class="card p-20x">
@@ -70,7 +70,7 @@
                     <option value="15">15 days</option>
                     <option value="30">30 days</option>
                 </select>
-                <a class="ml-10x font-14x" href="{{url('/date')}}">See More ></a>
+                <a class="ml-10x font-14x" href="{{url('/events')}}">See More ></a>
             </div>
         </div>
         <div class="sidebar-list-wrapper d-flex">
@@ -118,7 +118,7 @@
             <a class="btn-normal btn" href="">Add Reminder</a>
         </p>
     </div>
-    <div class="card todo-dashboard p-20x">
+    <div class="card p-20x">
         <div class="justify-content-space-between d-flex mb-15x">
             <h3>To Dos</h3>
             <div class="d-flex item-align-center">
@@ -133,7 +133,7 @@
                 <a class="ml-10x font-14x" href="{{url('todos')}}">See More ></a>
             </div>
         </div>
-        <a href="{{url('/todo/detail')}}">
+        <a href="{{url('/todos/detail')}}">
             <div class="dashboard-list-item d-flex">
                 <div class="d-flex item-align-center w-70p">
                     <input type="checkbox">
@@ -148,7 +148,7 @@
             </div>
         </a>
         <div class="divider"></div>
-        <a href="{{url('/todo/detail')}}">
+        <a href="{{url('/todos/detail')}}">
             <div class="dashboard-list-item d-flex">
                 <div class="d-flex item-align-center w-70p">
                     <input type="checkbox">
@@ -163,7 +163,7 @@
             </div>
         </a>
         <div class="divider"></div>
-        <a href="{{url('/todo/detail')}}">
+        <a href="{{url('/todos/detail')}}">
             <div class="dashboard-list-item d-flex">
                 <div class="d-flex item-align-center w-70p">
                     <input type="checkbox">
@@ -179,7 +179,7 @@
         </a>
         <p class="text-align-right pb-10x pt-10x">
             <br>
-            <a class="btn-normal btn" href="{{url('/todo/create')}}">Add Todo</a>
+            <a class="btn-normal btn" href="{{url('/todos/create')}}">Add Todo</a>
         </p>
     </div>
 </div>

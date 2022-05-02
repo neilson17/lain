@@ -69,14 +69,9 @@ STYLING
 /* Layouting */
 /* ================================================================================== */
 
-body.home {
+body {
     background: #070707;
     margin:0;
-}
-
-body.login {
-	margin: 0px;
-	background: #070707;
 }
 
 .sidebar {
@@ -174,6 +169,12 @@ body.login {
 	width: calc(100% - 20px);
 }
 
+.client-item-list-wrapper {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 15px;
+}
+
 /* Note */
 .note-list-wrapper{
 	display: grid;
@@ -214,6 +215,10 @@ body.login {
 	position:relative;
 }
 
+.position-absolute {
+	position:absolute;
+}
+
 .position-fixed {
 	position:fixed;
 }
@@ -236,10 +241,6 @@ h2, h3, h4, p {
 
 div {
 	font-family: Gilroy;
-}
-
-input.login {
-	width: 80%;
 }
 
 input[type="file"]{
@@ -287,14 +288,6 @@ input[type="datetime-local"]{
 	aspect-ratio: 1/1;
 }
 
-.container-text-login {
-	background: #292F45;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 1em;
-}
-
 .icon-list-sidebar-wrapper {
 	width:40px;
 	height: auto;
@@ -313,10 +306,6 @@ input[type="datetime-local"]{
 .active{
 	background: #101010;
 	border-radius: 10px;
-}
-
-.logo-login {
-	height: 15%;
 }
 
 select {
@@ -351,6 +340,7 @@ option {
 	width: 15px; 
 	height: 15px; 
 	border-radius: 30px;
+	cursor: pointer;
 }
 
 .btn {
@@ -414,6 +404,10 @@ option {
 	align-items: flex-end;
 }
 
+.justify-content-center{
+	justify-content: center;
+}
+
 .justify-content-end{
 	justify-content: flex-end;
 }
@@ -462,6 +456,10 @@ progress::-webkit-progress-bar {
 	width: 100%;
 }
 
+.w-100vw {
+	width: 100vw;
+}
+
 .w-30p {
 	width: 30%;
 }
@@ -500,6 +498,10 @@ progress::-webkit-progress-bar {
 
 .h-100p {
 	height: 100%;
+}
+
+.h-100vh {
+	height: 100vh;
 }
 
 .h-20x{
@@ -543,6 +545,10 @@ progress::-webkit-progress-bar {
 	margin-right: 20px;
 }
 
+.mr-40x {
+	margin-right: 40px;
+}
+
 /* Top */
 .mt-3x {
 	margin-top: 3px;
@@ -558,6 +564,18 @@ progress::-webkit-progress-bar {
 
 .mt-20x{
 	margin-top: 20px;
+}
+
+.mt-30x{
+	margin-top: 30px;
+}
+
+.mt-40x{
+	margin-top: 40px;
+}
+
+.mt-70x{
+	margin-top: 70px;
 }
 
 /* Bottom */
@@ -633,6 +651,10 @@ progress::-webkit-progress-bar {
 	padding-right: 20px;
 }
 
+.pr-40x {
+	padding-right: 40px;
+}
+
 /* Left */
 .pl-7x {
 	padding-left: 7px;
@@ -644,6 +666,10 @@ progress::-webkit-progress-bar {
 
 .pl-20x {
 	padding-left: 20px;
+}
+
+.pl-40x {
+	padding-left: 40px;
 }
 
 .font-10x {
@@ -658,49 +684,20 @@ progress::-webkit-progress-bar {
 	font-size: 14px;
 }
 
+.font-18x {
+	font-size: 18px;
+}
+
 /* ================================================================================== */
 /* RESPONSIVE */
 /* ================================================================================== */
 
 /*#region Login*/
 @media (min-width:  541px) {
-	.container-login {
-		display: grid;
-		height: 100vh;
-		grid-template-columns: 2fr 1fr;
-		grid-template-rows: 100vh;
-	}
 
-	.container-image-login {
-		grid-row: 1/2;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.container-text-login {
-		grid-row: 1/2;
-	}
-
-	.image-login {
-		height: 50%;
-	}
 }
 
 @media (max-width:  540px) {
-	.container-image-login {
-		display: none;
-		
-	}
 
-	.container-login {
-		justify-content: center;
-	}
-
-	.container-text-login {
-		width: 70%;
-		height: 220px;
-		margin-top: 20px;
-	}
 }
 /*#endregion Login*/

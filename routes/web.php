@@ -33,30 +33,22 @@ Route::get('/client/detail', function() {
     return view('client/detail');
 });
 
+Route::get('/client/create', function() {
+    return view('client/add');
+});
+
+Route::get('/client/edit', function() {
+    return view('client/edit');
+});
+
+Route::get('/setting', function() {
+    return view('setting/index');
+});
+
 Route::resource('notes', 'NoteController');
 Route::resource('teams', 'AccountController');
 Route::resource('todos', 'ToDoController');
-Route::resource('date', 'DateController');
-
-Route::get('/note/detail', function() {
-    return view('note/detail');
-});
-
-// Route::get('/date', function() {
-//     return view('date/index');
-// });
-
-// Route::get('/date/detail', function() {
-//     return view('date/detail');
-// });
-
-// Route::get('/date/create', function() {
-//     return view('date/add');
-// });
-
-// Route::get('/date/edit', function() {
-//     return view('date/edit');
-// });
+Route::resource('events', 'EventController');
 
 Route::get('/login', function() {
     return view('login/index');
