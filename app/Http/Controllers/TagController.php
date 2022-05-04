@@ -35,7 +35,16 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+        ]);
+
+        $tag = new Tag;
+        $tag->name = $request->name;
+        $tag->save();
+        $newid = $tag->id;
+
+        return response()->json(['success'=>'Successfully added new tag', 'newid'=>$newid]);
     }
 
     /**

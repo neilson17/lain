@@ -8,6 +8,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body class="w-100vw h-100vh d-flex justify-content-center item-align-center">
+	@csrf
 	<img src="{{ asset('assets/img/vector.png')}}" class="mr-40x">
 	<div class="d-flex flex-dir-col">
 		<!-- <h2 class="text-align-center mt-20x">Login</h2> -->

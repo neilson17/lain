@@ -23,3 +23,7 @@
     <textarea name="" id="" cols="30" rows="10" class="input-text w-100p mw-100p"  placeholder="Event Description"></textarea>
 </div>
 @endsection
+
+@section('event-active')
+active
+@endsection

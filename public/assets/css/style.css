@@ -114,6 +114,18 @@ body {
 	box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
+.card-progress {
+	background-color: rgb(31, 163, 27);
+	border-radius: 10px;
+	color: white;
+}
+
+.card-warning {
+	background-color: rgb(240, 49, 49);
+	border-radius: 10px;
+	color: white;
+}
+
 .account-info-header{
 	flex-direction: column;
 	justify-content: center;
@@ -195,6 +207,10 @@ body {
 	display:flex;
 }
 
+.d-none{
+	display: none;
+}
+
 .d-inline-flex {
 	display: inline-flex;
 }
@@ -258,11 +274,11 @@ input[type="date"]{
 }
 
 input[type="datetime-local"]{
-	color:white;
+	filter: invert(1);
 	font-family: Gilroy;
 	border-radius:10px;
 	background:none;
-	border: 1px white solid;
+	border: 1px black solid;
 }
 
 .input-text{
@@ -333,6 +349,17 @@ option {
 }
 
 .todo-tag-delete{
+	background: rgb(240, 49, 49); 
+	position:absolute; 
+	right:-4px; 
+	top:-5px; 
+	width: 15px; 
+	height: 15px; 
+	border-radius: 30px;
+	cursor: pointer;
+}
+
+.todo-assign-delete{
 	background: rgb(240, 49, 49); 
 	position:absolute; 
 	right:-4px; 
@@ -528,8 +555,16 @@ progress::-webkit-progress-bar {
 	padding: 10px;
 }
 
+.p-15x {
+	padding: 15px;
+}
+
 .p-20x {
 	padding: 20px;
+}
+
+.m-0 {
+	margin: 0;
 }
 
 .m-10x{
@@ -619,6 +654,10 @@ progress::-webkit-progress-bar {
 
 .pt-10x {
 	padding-top: 10px;
+}
+
+.pt-15x {
+	padding-top: 15px;
 }
 
 .pt-20x {

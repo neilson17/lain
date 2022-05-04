@@ -135,4 +135,23 @@ class NoteController extends Controller
         dd($notes);
         // return view('note.index', compact('public', 'private'));
     }
+
+    public function searchNote(Request $request)
+    {
+        $notes = DB::table('notes as n')
+            ->join('clients as c', 'n.clients_id', '=', 'c.id')
+            ->where('accounts_username', '=', 'admin')
+            ->select('n.*', 'c.name')
+            ->where('n.title', 'like', "%".$request->inpsearchnote."%")
+            ->get();
+
+        $public = $private = [];
+
+        foreach($notes as $n) {
+            if ($n->type == "public") array_push($public, $n);
+            else array_push($private, $n);
+        }
+        // dd($public);
+        return view('note.index', compact('public', 'private'));
+    }
 }

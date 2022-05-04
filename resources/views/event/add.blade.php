@@ -29,3 +29,7 @@
 </div>
 </form>
 @endsection
+
+@section('event-active')
+active
+@endsection

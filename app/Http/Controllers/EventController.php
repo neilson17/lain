@@ -60,7 +60,9 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        //
+        $data = $event;
+        $client = $data->client;
+        return view('event.detail', compact('data', 'client'));
     }
 
     /**
@@ -95,5 +97,15 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         //
+    }
+
+    public function searchEvent(Request $request)
+    {
+        $data = DB::table('events as e')
+            ->join('clients as c', 'e.clients_id', '=', 'c.id')
+            ->select('e.*', 'c.name as client_name', 'c.photo_url')
+            ->where('e.title', 'like', "%".$request->inpsearchevent."%")
+            ->get();
+        return view('event.index', compact('data'));
     }
 }

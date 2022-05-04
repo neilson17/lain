@@ -108,17 +108,28 @@ class AccountController extends Controller
         // return response()->json(array('status'=>'oke', 'msg'=>$result->username, 'res' => $res), 200);
     }
 
-    public function testpost(Request $request) {
+    public function login(Request $request) {
         $username = $request->username;
         $password = $request->password;
-        console.log($username);
-        // return response()->json(array(
-        //     'msg' => $username
-        // ), 200);
+
+        $account=Account::where([
+            ['username', '=', $username], 
+            ['password', '=', $password]
+        ])->get();
+
+        if (count($account) == 0) return response()->json(array('status'=>'fail'));
+        else return response()->json(array('status'=>'success'));
     }
 
     public function showAccount() {
         $account = Account::all();
         dd($account);
+    }
+
+    public function searchTeam(Request $request)
+    {
+        $data = Account::where('name', 'like', "%".$request->inpsearchteam."%")->get();
+        return view('team.index', compact('data'));
+        // dd($data);
     }
 }

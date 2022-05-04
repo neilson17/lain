@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ToDo extends Model
+class Todo extends Model
 {
     public $timestamps = false;
 
@@ -13,7 +13,7 @@ class ToDo extends Model
     }
 
     public function accounts() {
-        return $this->belongsToMany('App\Account');
+        return $this->belongsToMany('App\Account', 'account_todo', 'todo_id', 'account_username');
     }
 
     public function client() {

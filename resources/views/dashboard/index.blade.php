@@ -9,7 +9,7 @@
         <!-- Cuma liatin mentok 5 client aja tapi diurutin dari deadline terdekat -->
         <div class="justify-content-space-between d-flex mb-15x">
             <h3>Clients</h3>
-            <a class="font-14x" href="{{url('/client')}}">See More ></a>
+            <a class="font-14x" href="{{url('/clients')}}">See More ></a>
         </div>
         <div class="sidebar-list-wrapper d-flex">
             <a href="">

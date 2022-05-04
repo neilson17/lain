@@ -4,62 +4,37 @@
 <div class="d-flex ml-10x justify-content-space-between">
     <h2>Lain Group Client</h2>
     <div class="d-flex">
-        <input type="text" class="input-text-merged-button">
-        <a class="btn-merged-input btn" href="">Search</a>
-        <a class="btn-normal btn ml-10x" href="{{url('/client/create')}}">Add Client</a>
+        <form class="d-flex m-0" method="POST" id="search-client" action="{{route('clients.searchClient')}}">
+            @csrf
+            <input type="text" name="inpsearchclient" class="input-text-merged-button">
+            <a type="submit" class="btn-merged-input btn" id="btn-search-client" href="#">Search</a>
+        </form>
+        <a class="btn-normal btn ml-10x" href="{{route('clients.create')}}">Add Client</a>
     </div>
 </div>
-<a href="">
+@foreach($data as $d)
+<a href="{{ url('/clients/'.$d['data']->id) }}">
     <div class="card p-10x client-list-item mt-15x dashboard-list-item d-flex">
         <div class="d-flex w-70p item-align-center">
             <img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt="">
             <div class="ml-10x mr-10x w-100p">
                 <div class="d-flex item-align-end">
-                    <p class="dashboard-item-header">Client Deadline</p>
-                    <p class="font-12x ml-5x">(Website)</p>
+                    <p class="dashboard-item-header">{{ $d["data"]->name }}</p>
+                    <p class="font-12x ml-5x">({{ $d["data"]->job_category->name }})</p>
                 </div>
-                <progress class="w-80p" id="progressclientdashboard" value="32" max="100"></progress>
-                <label for="progressclientdashboard" class="font-14x">10%</label>
-                <p class="font-12x">Task Done: 14/20</p>
+                <progress class="w-80p" id="progressclientdashboard" value="{{ $d['taskDone'] / $d['totalTask'] * 100 }}" max="100"></progress>
+                <label for="progressclientdashboard" class="font-14x">{{ $d["percentage"] }}%</label>
+                <p class="font-12x">Task Done: {{ $d["taskDone"] }}/{{ $d["totalTask"] }}</p>
             </div>
         </div>
-        <p class="font-12x text-align-right">Due 15 Apr 2022, 15.00</p> 
+        <p class="font-12x text-align-right">Due {{ $d["formatted_date"] }}</p> 
     </div>
 </a>
-<a href="">
-    <div class="card p-10x client-list-item mt-15x dashboard-list-item d-flex">
-        <div class="d-flex w-70p item-align-center">
-            <img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt="">
-            <div class="ml-10x mr-10x w-100p">
-                <div class="d-flex item-align-end">
-                    <p class="dashboard-item-header">Client Deadline</p>
-                    <p class="font-12x ml-5x">(Website)</p>
-                </div>
-                <progress class="w-80p" id="progressclientdashboard" value="32" max="100"></progress>
-                <label for="progressclientdashboard" class="font-14x">10%</label>
-                <p class="font-12x">Task Done: 14/20</p>
-            </div>
-        </div>
-        <p class="font-12x text-align-right">Due 15 Apr 2022, 15.00</p> 
-    </div>
-</a>
-<a href="">
-    <div class="card p-10x client-list-item mt-15x dashboard-list-item d-flex">
-        <div class="d-flex w-70p item-align-center">
-            <img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt="">
-            <div class="ml-10x mr-10x w-100p">
-                <div class="d-flex item-align-end">
-                    <p class="dashboard-item-header">Client Deadline</p>
-                    <p class="font-12x ml-5x">(Website)</p>
-                </div>
-                <progress class="w-80p" id="progressclientdashboard" value="32" max="100"></progress>
-                <label for="progressclientdashboard" class="font-14x">10%</label>
-                <p class="font-12x">Task Done: 14/20</p>
-            </div>
-        </div>
-        <p class="font-12x text-align-right">Due 15 Apr 2022, 15.00</p> 
-    </div>
-</a>
+@endforeach
+@endsection
+
+@section('javascript')
+<script src="{{asset('assets/js/main.js')}}"></script>
 @endsection
 
 @section('client-active')

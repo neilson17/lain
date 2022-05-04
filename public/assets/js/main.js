@@ -15,43 +15,124 @@
 // coba post
 $('#ajax-login').on('click', function () {
     var username = $("#textUsername").val();
-    var password = $("#textPassword").val()
+    var password = $("#textPassword").val();
+    var token_name = $('input[name="_token"]').val();
     $.ajax({
-        method:'POST',
-        url:"api/login",
-        data:'_token= <?php echo csrf_token() ?> &username='+username + ' &password='+password,
-        success: function(data){
-            alert(data.msg);
-            // if (data.res == "YES") window.location.href = "dashboard";
-            // else alert("Wrong username or password");
-        }
-        });
+        url: "/api/login",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            username: username,
+            password: password,
+        },
+        success:function(response){
+            if (response.status == "success"){
+                window.location = "/dashboard";
+            }
+            else alert("Wrong username or password!\nPlease try again.");
+        },
+        error: function(response) {
+            alert("There is an error while logging in!");
+        },
+    });
 });
 
 // ========================================================================
-// Add Todo
+// Todo List
 // ========================================================================
-
-var taglist = [];
-$('#add-todo-add-tag').on('click', function(){
-    var tagval = $('#add-todo-add-tag-list').find(":selected").val();
-    if (tagval != null){
-        taglist.push(tagval);
-        var tagname = $('#add-todo-add-tag-list').find(":selected").text();
-        $('#add-todo-tag-list').append(`
-            <div class="position-relative">
-                <div class="dashboard-tag-item font-12x">${tagname}</div>
-                <span class="todo-tag-delete color-white text-align-center font-10x">x</span>
-            </div>
-        `);
-        $("#add-todo-add-tag-list option[value='" + tagval + "']").remove();
-        alert(taglist);
-    }
-    else {
-        alert('All tags have been used! Please create a new one!')
-    }
+$("#btn-search-todo").on('click', function(){
+    $("#search-todo").submit();
 });
 
-$(document).on('click', '.todo-tag-delete', function(){
-    $(this).parent().remove();
+// Juga dipake buat todo detail di bagian mark done
+$(".done-todo-list").on('click', function(){
+    var todoid = $(this).attr('id');
+    var done = ($(this).is(":checked")) ? 1 : 0;
+
+    var token_name = $('input[name="_token"]').val();
+    $.ajax({
+        url: "/api/donetodo",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            id:todoid,
+            done: done,
+        },
+        success:function(response){
+            console.log(response.success);
+        },
+        error: function(response) {
+            console.log("Error while updating todo");
+        },
+    });
+});
+
+// ========================================================================
+// Note List
+// ========================================================================
+
+$("#btn-search-note").on('click', function(){
+    $("#search-note").submit();
+});
+
+// ========================================================================
+// Event List
+// ========================================================================
+
+$("#btn-search-event").on('click', function(){
+    $("#search-event").submit();
+});
+
+// ========================================================================
+// Team List
+// ========================================================================
+
+$("#btn-search-team").on('click', function(){
+    $("#search-team").submit();
+});
+
+// ========================================================================
+// Client List
+// ========================================================================
+
+$("#btn-search-client").on('click', function(){
+    $("#search-client").submit();
+});
+
+// ========================================================================
+// Client Detail
+// ========================================================================
+
+$(".done-todo-client-detail").on('click', function(){
+    var todoid = $(this).attr('id');
+    var done = ($(this).is(":checked")) ? 1 : 0;
+
+    var token_name = $('input[name="_token"]').val();
+    $.ajax({
+        url: "/api/donetodo",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            id:todoid,
+            done: done,
+        },
+        success:function(response){
+            console.log(response.success);
+        },
+        error: function(response) {
+            console.log("Error while updating todo");
+        },
+    });
+
+    var tt = parseInt($("#progressvalue").attr("tt"));
+    var td = parseInt($("#progressvalue").attr("td"));
+    td = (done == 1) ? td + 1 : td - 1;
+    $("#progressvalue").attr("tt", tt);
+    $("#progressvalue").attr("td", td);
+    $("#progressvalue").html("Task Done: " + td + "/" + tt);
+    var percentage =  td/tt*100;
+    $("#progressclientdetail").attr("value", percentage);
+    $("#progresspercentage").html(+percentage.toFixed(2) + "%");
+
+    $("#clientdonecard").html((tt == td) ? '<div class="dashboard-tag-item font-12x btn-progress">Done</div>' : '<div class="dashboard-tag-item font-12x">In Progress</div>');
 });

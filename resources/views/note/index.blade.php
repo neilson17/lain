@@ -4,8 +4,11 @@
 <div class="d-flex ml-10x mb-15x justify-content-space-between">
     <h2>Notes</h2>
     <div class="d-flex">
-        <input type="text" class="input-text-merged-button">
-        <a class="btn-merged-input btn" href="">Search</a>
+        <form class="d-flex m-0" method="POST" id="search-note" action="{{route('notes.searchNote')}}">
+            @csrf
+            <input type="text" name="inpsearchnote" class="input-text-merged-button">
+            <a type="submit" class="btn-merged-input btn" id="btn-search-note" href="#">Search</a>
+        </form>
         <a class="btn-normal btn ml-10x" href="{{route('notes.create')}}">Create Note</a>
     </div>
 </div>
@@ -61,6 +64,10 @@
         @endforeach
     </div>
 </div>
+@endsection
+
+@section('javascript')
+<script src="{{asset('assets/js/main.js')}}"></script>
 @endsection
 
 @section('note-active')

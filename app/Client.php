@@ -13,6 +13,14 @@ class Client extends Model
     }
 
     public function todos() {
-        return $this -> hasMany('App\ToDo', 'clients_id', 'id');
+        return $this -> hasMany('App\Todo', 'clients_id', 'id');
+    }
+
+    public function job_category() {
+        return $this -> belongsTo('App\JobCategory', 'job_categories_id');
+    }
+
+    public function events() {
+        return $this -> hasMany('App\Todo', 'clients_id', 'id');
     }
 }

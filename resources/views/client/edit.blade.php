@@ -46,3 +46,7 @@
     </div>
 </form>
 @endsection
+
+@section('client-active')
+active
+@endsection

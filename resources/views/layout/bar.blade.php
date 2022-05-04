@@ -38,12 +38,28 @@
                         <h3 class="text-list-sidebar">Finance</h3>
                     </div>
                 </a>
-                <a href="{{url('/client')}}" class="@yield('client-active')">
+                <a href="{{url('/clients')}}" class="@yield('client-active')">
                     <div class="sidebar-list-item d-flex">
                         <div class="icon-list-sidebar-wrapper">
                             <img src="{{asset('assets/icons/icon-4.png')}}" class="icon-list-sidebar" alt="">
                         </div>
                         <h3 class="text-list-sidebar">Client</h3>
+                    </div>
+                </a>
+                <a href="/todos" class="@yield('todo-active')">
+                    <div class="sidebar-list-item d-flex">
+                        <div class="icon-list-sidebar-wrapper">
+                            <img src="{{asset('assets/icons/icon-9.png')}}" class="icon-list-sidebar" alt="">
+                        </div>
+                        <h3 class="text-list-sidebar">Todo</h3>
+                    </div>
+                </a>
+                <a href="/events" class="@yield('event-active')">
+                    <div class="sidebar-list-item d-flex">
+                        <div class="icon-list-sidebar-wrapper">
+                            <img src="{{asset('assets/icons/icon-8.png')}}" class="icon-list-sidebar" alt="">
+                        </div>
+                        <h3 class="text-list-sidebar">Event</h3>
                     </div>
                 </a>
                 <a href="/notes" class="@yield('note-active')">
@@ -56,7 +72,7 @@
                 </a>
             </div>
             <div class="sidebar-list-wrapper d-flex">
-                <a href="" class="@yield('settings-active')">
+                <a href="/setting" class="@yield('settings-active')">
                     <div class="sidebar-list-item d-flex">
                         <div class="icon-list-sidebar-wrapper">
                             <img src="{{asset('assets/icons/icon-6.png')}}" class="icon-list-sidebar" alt="">

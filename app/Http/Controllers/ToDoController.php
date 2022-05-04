@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\ToDo;
+use App\Todo;
 use Illuminate\Http\Request;
-use DB;
-use App\Account;
 use App\Client;
 use App\Tag;
+use App\Account;
+use DB;
 
-class ToDoController extends Controller
+class TodoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,8 +18,7 @@ class ToDoController extends Controller
      */
     public function index()
     {
-        // $data = DB::table('todos as t')->join('clients as c', 't.clients_id', '=', 'c.id')->select('t.*', 'c.name as client_name')->get();
-        $data = ToDo::all();
+        $data = DB::table('todos as t')->join('clients as c', 't.clients_id', '=', 'c.id')->select('t.*', 'c.id as client_id', 'c.name as client_name')->get();
         return view('todo.index', compact('data'));
     }
 
@@ -44,35 +43,51 @@ class ToDoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'deadline' => 'required',
+            'clients_id' => 'required',
+        ]);
+
+        $todo = new Todo;
+        $todo->name = $request->name;
+        $todo->description = $request->description;
+        $todo->deadline = date("Y-m-d H:i:s",strtotime($request->deadline));
+        $todo->done = 0;
+        $todo->clients_id = $request->clients_id;
+        $todo->save();
+        $taglist = Tag::find($request->tag);
+        $todo->tags()->attach($taglist);
+        $usernamelist = Account::find($request->assign);
+        $todo->accounts()->attach($usernamelist);
+        
+        return response()->json(['success'=>'Successfully added new todo']);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\ToDo  $toDo
+     * @param  \App\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function show(ToDo $toDo)
+    public function show(Todo $todo)
     {
-        $data = $toDo;
-        // $tag = $data->tags;
-        // $account = $data->accounts;
-        // $client = $data->client;
-
-        dd($data);
-        // return view('todo.detail');
-        // return view('todo.detail', compact('data'));
-        // return view('todo.detail', compact('data', 'tag', 'account', 'client'));
+        $data = $todo;
+        $client = $data->client;
+        $tag = $data->tags;
+        $account = $data->accounts;
+        $date = date("d M Y, H.i", strtotime($data->deadline));
+        return view('todo.detail', compact('data', 'date', 'client', 'tag', 'account'));
+        // dd($tag);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ToDo  $toDo
+     * @param  \App\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function edit(ToDo $toDo)
+    public function edit(Todo $todo)
     {
         //
     }
@@ -81,10 +96,10 @@ class ToDoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ToDo  $toDo
+     * @param  \App\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ToDo $toDo)
+    public function update(Request $request, Todo $todo)
     {
         //
     }
@@ -92,11 +107,34 @@ class ToDoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ToDo  $toDo
+     * @param  \App\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ToDo $toDo)
+    public function destroy(Todo $todo)
     {
         //
+    }
+
+    public function showTodo() {
+        $todo = Todo::all();
+        dd($todo);
+    }
+
+    public function searchTodo(Request $request){
+        $data = DB::table('todos as t')
+            ->join('clients as c', 't.clients_id', '=', 'c.id')
+            ->select('t.*', 'c.id as client_id', 'c.name as client_name')
+            ->where('t.name', 'like', "%".$request->inpsearchtodo."%")
+            ->get();
+        return view('todo.index', compact('data'));
+    }
+
+    public function changeDone(Request $request)
+    {
+        $todo = Todo::find($request->id);
+        $todo->done = $request->done;
+        $todo->save();
+        
+        return response()->json(['success'=>'Successfully updated new todo']);
     }
 }
