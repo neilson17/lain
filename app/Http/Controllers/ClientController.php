@@ -58,7 +58,23 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $date = $request->get('deadline');
+        $dates = explode("T", $date);        
+        $deadline = date("Y-m-d H:i:s", strtotime($dates[0]." ".$dates[1]));
+        dd($deadline);
+        $client = new Client();
+        $client->name = $request->get('name');
+        $client->description = $request->get('description');
+        $client->email = $request->get('email');
+        $client->phone_number = $request->get('phone_number');
+        $client->instagram = $request->get('instagram');
+        $client->linkedin = $request->get('linkedin');
+        $client->status = "in progress";
+        $client->deadline = $deadline;
+        $client->job_categories_id = "";
+        $client->photo_url = $request->get('photo_url');
+        // $client->save();
+        // return redirect()->route('clients.index');
     }
 
     /**
