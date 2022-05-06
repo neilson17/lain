@@ -20,10 +20,10 @@
             </div>
             <div class="w-100p mt-15x">
                 <p class="font-14px">Job Category</p>
-                <select class="mt-3x text-align-center h-30x pl-20x pr-20x" name="clients_id" id="">
-                    <option value="">Website</option>
-                    <option value="">Mobile Apps</option>
-                    <option value="">Apps</option>
+                <select class="mt-3x text-align-center h-30x pl-20x pr-20x" name="job_categories_id" id="">
+                    @foreach($job_categories as $c)
+                        <option value="{{ $c->id }}">{{ $c->name }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="w-100p mt-15x">

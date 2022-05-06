@@ -47,7 +47,9 @@ class ClientController extends Controller
      */
     public function create()
     {
-        return view('client.add');
+        $job_categories = JobCategory::all();
+        // dd($job_categories);
+        return view('client.add', compact('job_categories'));
     }
 
     /**
@@ -71,7 +73,7 @@ class ClientController extends Controller
         $client->linkedin = $request->get('linkedin');
         $client->status = "in progress";
         $client->deadline = $deadline;
-        $client->job_categories_id = "";
+        $client->job_categories_id = $request->get('job_categories_id');
         $client->photo_url = $request->get('photo_url');
         // $client->save();
         // return redirect()->route('clients.index');
