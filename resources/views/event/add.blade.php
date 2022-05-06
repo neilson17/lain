@@ -10,8 +10,7 @@
             <div class="w-60p">
                 <input type="text" class="input-text w-100p" placeholder="Event Title" name="title">
             </div>
-            <a class="ml-15x btn btn-normal" href="">Save</a>
-            <button type="submit" class="ml-15x btn btn-normal">Savee</button>
+            <button type="submit" class="ml-15x btn btn-normal">Save</button>
         </div>
         <div class="d-flex item-align-center mt-10x">
             <p class="font-14px d-flex">Due</p>

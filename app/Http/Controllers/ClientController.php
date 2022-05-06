@@ -90,7 +90,10 @@ class ClientController extends Controller
         $percentage = round(($td/$tt) * 100, 2);
         $data = $client;
         $date = date("d M Y, H.i", strtotime($client->deadline));
-        $todos = Todo::where('clients_id', '=', $client->id)->get();
+        $todos = Todo::where('clients_id', '=', $client->id)
+            ->whereBetween('deadline', [DB::raw('curdate()'), DB::raw('date_add(curdate(), interval 1 day)')])
+            ->orderBy('deadline')
+            ->get();
 
         $accounts = [];
         foreach($todos as $d) {
@@ -104,7 +107,10 @@ class ClientController extends Controller
         foreach($accounts as $a)
             array_push($accountss, Account::where('username', '=', $a)->get());
 
-        $events = Event::where('clients_id', '=', $data->id)->get();
+        $events = Event::where('clients_id', '=', $data->id)
+            ->whereBetween('date', [DB::raw('curdate()'), DB::raw('date_add(curdate(), interval 1 day)')])
+            ->orderBy('date')
+            ->get();
 
         $notes = DB::table('notes as n')->join('clients as c', 'n.clients_id', '=', 'c.id')->where([['accounts_username', '=', 'admin'], ['clients_id', '=', $data->id]])->select('n.*', 'c.name')->get();
 
@@ -114,9 +120,6 @@ class ClientController extends Controller
             if ($n->type == "public") array_push($public, $n);
             else array_push($private, $n);
         }
-
-        // dd($private);
-        // dd($events);
 
         return view('client.detail', compact('data', 'date', 'tt', 'td', 'percentage', 'accountss', 'events', 'todos', 'public', 'private'));
     }
@@ -171,5 +174,71 @@ class ClientController extends Controller
         // dd($data);
 
         return view('client.index', compact('data'));
+    }
+
+    public function rangeEvent(Request $request){
+        $client = Client::find($request->client_id);
+        $range = $request->range;
+
+        if ($range == 100){
+            $events = Event::where('clients_id', '=', $client->id)
+                ->where('date', '>=', DB::raw('curdate()'))
+                ->orderBy('date')
+                ->get();
+        }
+        else if ($range == 200){
+            $events = Event::where('clients_id', '=', $client->id)
+                ->orderBy('date')
+                ->get();
+        }
+        else {
+            $events = Event::where('clients_id', '=', $client->id)
+                ->whereBetween('date', [DB::raw('curdate()'), DB::raw('date_add(curdate(), interval '.$request->range.' day)')])
+                ->orderBy('date')
+                ->get();
+        }
+
+        $elements = "";
+        foreach($events as $e){
+            $elements .= '<a href="/events/'.$e->id.'"><div class="dashboard-list-item d-flex"><div class="d-flex"><div class="ml-10x"><p class="dashboard-item-header">'.$e->title.'</p></div></div><p class="font-12x text-align-right">Due '.$e->date.'</p></div></a><div class="divider"></div>';
+        }
+
+        return response()->json(['success'=>'Successfully updated range on events', 'elements'=>$elements]);
+    }
+
+    public function rangeTodo(Request $request){
+        $client = Client::find($request->client_id);
+        $range = $request->range;
+
+        if ($range == 100){
+            $todos = Todo::where('clients_id', '=', $client->id)
+                ->where('deadline', '>=', DB::raw('curdate()'))
+                ->orderBy('deadline')
+                ->get();
+        }
+        else if ($range == 200){
+            $todos = Todo::where('clients_id', '=', $client->id)
+                ->where('done', 0)
+                ->orderBy('deadline')
+                ->get();
+        }
+        else if ($range == 300){
+            $todos = Todo::where('clients_id', '=', $client->id)
+                ->orderBy('deadline')
+                ->get();
+        }
+        else {
+            $todos = Todo::where('clients_id', '=', $client->id)
+                ->whereBetween('deadline', [DB::raw('curdate()'), DB::raw('date_add(curdate(), interval '.$request->range.' day)')])
+                ->orderBy('deadline')
+                ->get();
+        }
+
+        $elements = "";
+        foreach($todos as $t){
+            $elements .= '<a href="/todos/'.$t->id.'"><div class="dashboard-list-item d-flex"><div class="d-flex item-align-center w-70p"><input id="'.$t->id.'" class="done-todo-client-detail" type="checkbox" '.($t->done == 1 ? 'checked': '').'><div class="ml-10x"><p class="dashboard-item-header">'.$t->name.'</p></div> </div><div class="w-30p"><p class="font-12x text-align-right">Due '.$t->deadline.'</p></div></div></a><div class="divider"></div>';
+        }
+
+        return response()->json(['success'=>'Successfully updated range on todos', 'elements'=>$elements]);
     }
 }

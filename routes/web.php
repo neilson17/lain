@@ -66,6 +66,8 @@ Route::get('api/showtodo', 'TodoController@showTodo');
 Route::post('api/createtodotag', 'TagController@store');
 Route::post('api/createtodo', 'TodoController@store');
 Route::post('api/donetodo', 'TodoController@changeDone');
+Route::post('api/rangeevent', 'ClientController@rangeEvent');
+Route::post('api/rangetodo', 'ClientController@rangeTodo');
 
 // Search
 Route::post('todos', 'TodoController@searchTodo')

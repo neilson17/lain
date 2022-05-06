@@ -136,3 +136,51 @@ $(".done-todo-client-detail").on('click', function(){
 
     $("#clientdonecard").html((tt == td) ? '<div class="dashboard-tag-item font-12x btn-progress">Done</div>' : '<div class="dashboard-tag-item font-12x">In Progress</div>');
 });
+
+$("#range-event-client-detail").on('change', function(){
+    var range = $(this).val();
+    var clientid = $(this).attr('client');
+
+    var token_name = $('input[name="_token"]').val();
+    $.ajax({
+        url: "/api/rangeevent",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            range: range,
+            client_id:clientid,
+        },
+        success:function(response){
+            console.log(response.success);
+            $("#event-list-client-detail").html(response.elements);
+        },
+        error: function(response) {
+            console.log(response);
+            console.log("Error while updating range on events");
+        },
+    });
+});
+
+$("#range-todo-client-detail").on('change', function(){
+    var range = $(this).val();
+    var clientid = $(this).attr('client');
+
+    var token_name = $('input[name="_token"]').val();
+    $.ajax({
+        url: "/api/rangetodo",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            range: range,
+            client_id:clientid,
+        },
+        success:function(response){
+            console.log(response.success);
+            $("#todo-list-client-detail").html(response.elements);
+        },
+        error: function(response) {
+            console.log(response);
+            console.log("Error while updating range on events");
+        },
+    });
+});

@@ -75,17 +75,19 @@
             <h3>Upcoming Events</h3>
             <div class="d-flex item-align-center">
                 <p class="mr-10x font-14x">Range: </p>
-                <select name="" class="pr-20x pl-20x" id="">
+                <select client="{{$data->id}}" class="pr-20x pl-20x" id="range-event-client-detail">
                     <option value="1">1 day</option>
                     <option value="3">3 days</option>
                     <option value="7">7 days</option>
                     <option value="15">15 days</option>
                     <option value="30">30 days</option>
+                    <option value="100">All Upcoming</option>
+                    <option value="200">All</option>
                 </select>
                 <a class="ml-10x font-14x" href="{{url('/events')}}">See More ></a>
             </div>
         </div>
-        <div class="sidebar-list-wrapper d-flex">
+        <div class="sidebar-list-wrapper d-flex" id="event-list-client-detail">
             @foreach($events as $e)
             <a href="{{ url('/events/'.$e->id) }}">
                 <div class="dashboard-list-item d-flex">
@@ -110,32 +112,37 @@
             <h3>To Dos</h3>
             <div class="d-flex item-align-center">
                 <p class="mr-10x font-14x">Range: </p>
-                <select name="" class="pr-20x pl-20x" id="">
+                <select client="{{$data->id}}" class="pr-20x pl-20x" id="range-todo-client-detail">
                     <option value="1">1 day</option>
                     <option value="3">3 days</option>
                     <option value="7">7 days</option>
                     <option value="15">15 days</option>
                     <option value="30">30 days</option>
+                    <option value="100">All Upcoming</option>
+                    <option value="200">All Not Done</option>
+                    <option value="300">All</option>
                 </select>
                 <a class="ml-10x font-14x" href="{{url('todos')}}">See More ></a>
             </div>
         </div>
-        @foreach($todos as $t)
-        <a href="{{url('/todos/'.$t->id)}}">
-            <div class="dashboard-list-item d-flex">
-                <div class="d-flex item-align-center w-70p">
-                    <input id="{{$t->id}}" class="done-todo-client-detail" type="checkbox" @if($t->done == 1) checked @endif>
-                    <div class="ml-10x">
-                        <p class="dashboard-item-header">{{ $t->name }}</p>
-                    </div> 
+        <div id="todo-list-client-detail">
+            @foreach($todos as $t)
+            <a href="{{url('/todos/'.$t->id)}}">
+                <div class="dashboard-list-item d-flex">
+                    <div class="d-flex item-align-center w-70p">
+                        <input id="{{$t->id}}" class="done-todo-client-detail" type="checkbox" @if($t->done == 1) checked @endif>
+                        <div class="ml-10x">
+                            <p class="dashboard-item-header">{{ $t->name }}</p>
+                        </div> 
+                    </div>
+                    <div class="w-30p">
+                        <p class="font-12x text-align-right">Due {{ $t->deadline }}</p>
+                    </div>
                 </div>
-                <div class="w-30p">
-                    <p class="font-12x text-align-right">Due {{ $t->deadline }}</p>
-                </div>
-            </div>
-        </a>
-        <div class="divider"></div>
-        @endforeach
+            </a>
+            <div class="divider"></div>
+            @endforeach
+        </div>
         <p class="text-align-right pb-10x pt-10x">
             <br>
             <a class="btn-normal btn" href="{{url('/todo/create')}}">Add Todo</a>

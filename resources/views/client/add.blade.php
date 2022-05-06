@@ -19,6 +19,14 @@
                 <textarea type="text" class="input-text mt-3x w-100p" name="description"></textarea>
             </div>
             <div class="w-100p mt-15x">
+                <p class="font-14px">Job Category</p>
+                <select class="mt-3x text-align-center h-30x pl-20x pr-20x" name="clients_id" id="">
+                    <option value="">Website</option>
+                    <option value="">Mobile Apps</option>
+                    <option value="">Apps</option>
+                </select>
+            </div>
+            <div class="w-100p mt-15x">
                 <p class="font-14x">Deadline</p>
                 <input type="datetime-local" class="pt-5x pb-5x pl-10x mt-3x pr-10x" name="deadline">
             </div>
@@ -41,7 +49,6 @@
             </div>
             <br>
             <p class="text-align-right h-40x">
-                {{-- <a class="ml-15x btn btn-normal d-inline-flex" href="">Save</a> --}}
                 <button type="submit" class="ml-15x btn btn-normal d-inline-flex">Savee</button>
             </p>
         </div>
