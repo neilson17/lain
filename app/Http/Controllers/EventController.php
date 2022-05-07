@@ -39,17 +39,20 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $date = $request->get('date');
-        $dates = explode("T", $date);        
-        $date = date("Y-m-d H:i:s", strtotime($dates[0]." ".$dates[1]));
+        $request->validate([
+            'title' => 'required',
+            'date' => 'required',
+            'clients_id' => 'required',
+        ]);
+
         $data = new Event();
-        $data->title = $request->get('title');
-        $data->description = $request->get('description');
-        $data->date = $date;
-        $data->clients_id = $request->get('clients_id');
-        // dd($data);
+        $data->title = $request->title;
+        $data->description = $request->description;
+        $data->date = date("Y-m-d H:i:s",strtotime($request->date));
+        $data->clients_id = $request->clients_id;
         $data->save();
-        return redirect()->route('events.index');
+
+        return response()->json(['success'=>'Successfully added new event']);
     }
 
     /**
@@ -73,7 +76,9 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-        //
+        $data = $event;
+        $client = Client::all();
+        return view('event.edit', compact('data', 'client'));
     }
 
     /**
@@ -85,7 +90,21 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        //
+        $request->validate([
+            'eventid' => 'required',
+            'title' => 'required',
+            'date' => 'required',
+            'clients_id' => 'required',
+        ]);
+
+        $event = Event::find($request->get('eventid'));
+        $event->title = $request->get('title');
+        $event->description = $request->get('description');
+        $event->date = date("Y-m-d H:i:s",strtotime($request->get('date')));
+        $event->clients_id = $request->get('clients_id');
+        $event->save();
+        
+        return response()->json(['success'=>"Successfully edited event"]);
     }
 
     /**
@@ -96,7 +115,17 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        //
+        // dd($event);
+        try{
+            $event->delete();
+            return redirect()->route('events.index')->with('status',
+            'Successfully deleted event!');
+        }
+        catch(\PDOException $e)
+        {
+            $msg = 'Failed to delete event!'. $e;
+            return redirect()->route('events.index')->with('error', $msg);
+        }
     }
 
     public function searchEvent(Request $request)
@@ -104,8 +133,14 @@ class EventController extends Controller
         $data = DB::table('events as e')
             ->join('clients as c', 'e.clients_id', '=', 'c.id')
             ->select('e.*', 'c.name as client_name', 'c.photo_url')
-            ->where('e.title', 'like', "%".$request->inpsearchevent."%")
+            ->where('e.title', 'like', "%".$request->search."%")
             ->get();
-        return view('event.index', compact('data'));
+        
+        $elements = "";
+        foreach($data as $e){
+            $elements .= '<a href="/events/'.$e->id.'"><div class="dashboard-list-item d-flex"><div class="d-flex">'.($e->clients_id != 1 ? '<img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt="">' : '').'<div class="ml-10x"><p class="dashboard-item-header">'.$e->title.'</p>'.($e->clients_id != 1 ? '<p class="font-12x">'.$e->client_name.'</p>' : '').'</div></div><p class="font-12x text-align-right">Due '.$e->date.'</p></div></a><div class="divider"></div>';
+        }
+
+        return response()->json(['success'=>'Successfully searched events', 'elements'=>$elements]);
     }
 }

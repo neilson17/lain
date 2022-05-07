@@ -10,9 +10,13 @@
         </div>
         <div class="d-flex item-align-center">
             <p class="font-12x">Due {{ $date }}</p>
-            <div>
-                <a class="ml-15x btn btn-normal" href="{{url('/todo/edit')}}">Edit</a>
-                <a class="ml-10x btn btn-warning" href="">Delete</a>
+            <div class="d-flex">
+                <a class="ml-15x btn btn-normal" href="{{url('/todos/'.$data->id.'/edit')}}">Edit</a>
+                <form method="POST" class="m-0 d-flex" id="delete-todo-detail" action="{{url('todos/'.$data->id)}}">
+                    @csrf
+                    @method('DELETE')
+                    <a id="btn-delete-todo-detail" class="ml-10x btn btn-warning border-none" href="#">Delete</a>
+                </form>
             </div>
         </div>
     </div>
@@ -21,7 +25,7 @@
         <input id="{{$data->id}}" class="done-todo-list" type="checkbox"  @if($data->done == 1) checked @endif>
         <p class="font-14x ml-10x">Mark as Done</p>
     </div>
-    <p class="mt-15x font-14x">{{ $data->description }}</p>
+    <p class="mt-15x font-14x">{!! nl2br($data->description) !!}</p>
     <div class="divider mt-15x mb-15x"></div>
     <h4>Collaborators</h4>
     <div class="d-flex mt-10x flex-wrap mb-10x">

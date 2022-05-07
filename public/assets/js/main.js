@@ -41,7 +41,23 @@ $('#ajax-login').on('click', function () {
 // Todo List
 // ========================================================================
 $("#btn-search-todo").on('click', function(){
-    $("#search-todo").submit();
+    var search = $("#inpsearchtodo").val();
+    var token_name = $('input[name="_token"]').val();
+    $.ajax({
+        url: "/api/searchtodos",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            search: search,
+        },
+        success:function(response){
+            console.log(response.success);
+            $("#todo-list-wrapper").html(response.elements);
+        },
+        error: function(response) {
+            console.log("Error while searching todos");
+        },
+    });
 });
 
 // Juga dipake buat todo detail di bagian mark done
@@ -68,19 +84,107 @@ $(".done-todo-list").on('click', function(){
 });
 
 // ========================================================================
+// Todo Detail
+// ========================================================================
+$("#btn-delete-todo-detail").on('click', function(){
+    let confirmAction = "Are you sure to delete this todo?";
+    if (confirm(confirmAction)){
+        $("#delete-todo-detail").submit();
+    }
+    else alert("Delete canceled");
+});
+
+// ========================================================================
 // Note List
 // ========================================================================
-
 $("#btn-search-note").on('click', function(){
-    $("#search-note").submit();
+    var search = $("#inpsearchnote").val();
+    var token_name = $('input[name="_token"]').val();
+    $.ajax({
+        url: "/api/searchnotes",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            search: search,
+        },
+        success:function(response){
+            console.log(response.success);
+            $("#private-note-list-wrapper").html(response.private);
+            $("#public-note-list-wrapper").html(response.public);
+        },
+        error: function(response) {
+            console.log("Error while searching notes");
+        },
+    });
 });
 
 // ========================================================================
 // Event List
 // ========================================================================
-
 $("#btn-search-event").on('click', function(){
-    $("#search-event").submit();
+    var search = $("#inpsearchevent").val();
+    var token_name = $('input[name="_token"]').val();
+    $.ajax({
+        url: "/api/searchevents",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            search: search,
+        },
+        success:function(response){
+            console.log(response.success);
+            $("#event-list-wrapper").html(response.elements);
+        },
+        error: function(response) {
+            console.log("Error while searching events");
+        },
+    });
+});
+
+// ========================================================================
+// Event Detail
+// ========================================================================
+$("#btn-delete-event-detail").on('click', function(){
+    let confirmAction = "Are you sure to delete this event?";
+    if (confirm(confirmAction)){
+        $("#delete-event-detail").submit();
+    }
+    else alert("Delete canceled");
+});
+
+// ========================================================================
+// Event Edit
+// ========================================================================
+$("#btn-edit-event").on('click', function(e){
+    var eventid = $("#inpeventid").val();
+    var title = $('input[name="inptodotitle"]').val();
+    var date = $('input[name="inpdate"]').val();
+    var clients_id = $('#inpclientid option:selected').val();
+    var description = $('#inpdescription').val();
+
+    var token_name = $('input[name="_token"]').val();
+    $.ajax({
+        url: "/api/editevent",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            eventid: eventid,
+            title: title,
+            description: description,
+            date: date,
+            clients_id: clients_id,
+        },
+        success:function(response){
+            e.preventDefault();
+            $("#notification-edit-event-success").removeClass("d-none");
+            console.log(response.success);
+        },
+        error: function(response) {
+            e.preventDefault();
+            $("#notification-edit-event-fail").removeClass("d-none");
+            console.log("Error while editing event");
+        },
+    });
 });
 
 // ========================================================================
@@ -88,7 +192,23 @@ $("#btn-search-event").on('click', function(){
 // ========================================================================
 
 $("#btn-search-team").on('click', function(){
-    $("#search-team").submit();
+    var search = $("#inpsearchteam").val();
+    var token_name = $('input[name="_token"]').val();
+    $.ajax({
+        url: "/api/searchteams",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            search: search,
+        },
+        success:function(response){
+            console.log(response.success);
+            $("#team-list-wrapper").html(response.elements);
+        },
+        error: function(response) {
+            console.log("Error while searching teams");
+        },
+    });
 });
 
 // ========================================================================
@@ -96,7 +216,23 @@ $("#btn-search-team").on('click', function(){
 // ========================================================================
 
 $("#btn-search-client").on('click', function(){
-    $("#search-client").submit();
+    var search = $("#inpsearchclient").val();
+    var token_name = $('input[name="_token"]').val();
+    $.ajax({
+        url: "/api/searchclients",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            search: search,
+        },
+        success:function(response){
+            console.log(response.success);
+            $("#client-list-wrapper").html(response.elements);
+        },
+        error: function(response) {
+            console.log("Error while searching teams");
+        },
+    });
 });
 
 // ========================================================================
@@ -155,7 +291,6 @@ $("#range-event-client-detail").on('change', function(){
             $("#event-list-client-detail").html(response.elements);
         },
         error: function(response) {
-            console.log(response);
             console.log("Error while updating range on events");
         },
     });

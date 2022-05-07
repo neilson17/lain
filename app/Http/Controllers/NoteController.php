@@ -16,7 +16,11 @@ class NoteController extends Controller
      */
     public function index()
     {
-        $notes = DB::table('notes as n')->join('clients as c', 'n.clients_id', '=', 'c.id')->where('accounts_username', '=', 'admin')->select('n.*', 'c.name')->get();
+        $notes = DB::table('notes as n')
+            ->join('clients as c', 'n.clients_id', '=', 'c.id')
+            ->where('accounts_username', '=', 'admin')
+            ->select('n.*', 'c.name')
+            ->get();
 
         $public = $private = [];
 
@@ -47,14 +51,21 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
+        // $request->validate([
+        //     'title' => 'required',
+        //     'type' => 'required',
+        //     'clients_id' => 'required',
+        //     'content' => 'required',
+        // ]);
+
         date_default_timezone_set('Asia/Jakarta');
         $date = date('Y-m-d H:i:s');
         $data = new Note();
-        $data->title = $request->get('title');
-        $data->content = $request->get('content');
+        $data->title = $request->title;
+        $data->content = $request->content;
         $data->date = $date;
-        $data->type = $request->get('type');
-        $data->clients_id = $request->get('clients_id');
+        $data->type = $request->type;
+        $data->clients_id = $request->clients_id;
         $data->accounts_username = "admin";
 
         // dd($data);
@@ -62,7 +73,8 @@ class NoteController extends Controller
         
         // coba pake redirect route
         // redirect()->route('suppliers.index');
-        return redirect()->route('notes.index')->with('status', 'data baru berhasil tersimpan');
+        // return redirect()->route('notes.index')->with('status', 'data baru berhasil tersimpan');
+        return response()->json(['success'=>'Successfully added new note']);
     }
 
     /**
@@ -142,16 +154,19 @@ class NoteController extends Controller
             ->join('clients as c', 'n.clients_id', '=', 'c.id')
             ->where('accounts_username', '=', 'admin')
             ->select('n.*', 'c.name')
-            ->where('n.title', 'like', "%".$request->inpsearchnote."%")
+            ->where('n.title', 'like', "%".$request->search."%")
             ->get();
 
-        $public = $private = [];
+        $privateelements = "";
+        $publicelements = "";
 
         foreach($notes as $n) {
-            if ($n->type == "public") array_push($public, $n);
-            else array_push($private, $n);
+            $elements = '<a href="/notes/'.$n->id.'"><div class="card p-10x note-list-item"><div class="d-flex justify-content-space-between item-align-center"><div><h4>'.$n->title.'</h4>'.($n->clients_id != 1 ? '<p class="font-12x">{{ $note->name }}</p>' : '').'</div><p class="font-12x text-align-right">'.$n->date.'</p></div><div class="divider mb-10x mt-10x"></div><p class="note-description-thumbnail font-12x">'.$n->content.'</p></div></a>';
+
+            if ($n->type == "public") $publicelements .= $elements;
+            else $privateelements .= $elements;
         }
-        // dd($public);
-        return view('note.index', compact('public', 'private'));
+
+        return response()->json(['success'=>'Successfully searched notes', 'public'=>$publicelements, 'private'=>$privateelements]);
     }
 }

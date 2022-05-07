@@ -4,22 +4,15 @@
 <div class="d-flex ml-10x mb-15x justify-content-space-between">
     <h2>Notes</h2>
     <div class="d-flex">
-        <form class="d-flex m-0" method="POST" id="search-note" action="{{route('notes.searchNote')}}">
-            @csrf
-            <input type="text" name="inpsearchnote" class="input-text-merged-button">
-            <a type="submit" class="btn-merged-input btn" id="btn-search-note" href="#">Search</a>
-        </form>
+        @csrf
+        <input type="text" id="inpsearchnote" class="input-text-merged-button">
+        <a class="btn-merged-input btn" id="btn-search-note" href="#">Search</a>
         <a class="btn-normal btn ml-10x" href="{{route('notes.create')}}">Create Note</a>
     </div>
 </div>
 <div class="note-page-content">
-    @if(session('status'))
-    <div class="alert alert-success">
-        {{ session('status') }}
-    </div>
-    @endif
     <h3 class="ml-15x mt-15x mb-15x">My Note</h3>
-    <div class="note-list-wrapper">
+    <div class="note-list-wrapper" id="private-note-list-wrapper">
         @foreach($private as $note)
             <a href="{{ url('/notes/'.$note->id) }}">
                 <div class="card p-10x note-list-item">
@@ -42,7 +35,7 @@
     </div>
     
     <h3 class="ml-15x mt-15x mb-15x">Public Note</h3>
-    <div class="note-list-wrapper">
+    <div class="note-list-wrapper" id="public-note-list-wrapper">
         @foreach($public as $note)
         <a href="{{ url('/notes/'.$note->id) }}">
                 <div class="card p-10x note-list-item">

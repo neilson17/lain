@@ -4,15 +4,28 @@
 <div class="d-flex ml-10x mb-15x justify-content-space-between">
     <h2>Todo</h2>
     <div class="d-flex">
-        <form class="d-flex m-0" method="POST" id="search-todo" action="{{route('todos.searchTodo')}}">
-            @csrf
-            <input type="text" name="inpsearchtodo" class="input-text-merged-button">
-            <a type="submit" class="btn-merged-input btn" id="btn-search-todo" href="#">Search</a>
-        </form>
+        @csrf
+        <input type="text" id="inpsearchtodo" class="input-text-merged-button">
+        <a class="btn-merged-input btn" id="btn-search-todo" href="#">Search</a>
         <a class="btn-normal btn ml-10x" href="{{route('todos.create')}}">Add Todo</a>
     </div>
 </div>
-<div class="flex-dir-col d-flex w-100p mt-15x">
+
+@if(session('status'))
+<div id="notification-delete-todo-success" class="mt-15x card-progress p-15x d-flex item-align-center">
+    <img src="{{asset('assets/img/light-bulb.png')}}" class="h-20x" alt="">
+    <p class="ml-15x">Successfully deleted todo</p>
+</div>
+@endif
+
+@if(session('error'))
+<div id="notification-delete-todo-fail" class="card-warning mt-15x p-15x d-flex item-align-center">
+    <img src="{{asset('assets/img/light-bulb.png')}}" class="h-20x" alt="">
+    <p class="ml-15x">{{session('error')}}</p>
+</div>
+@endif
+
+<div class="flex-dir-col d-flex w-100p mt-15x" id="todo-list-wrapper">
     @foreach($data as $d)
     <a href="{{ url('/todos/'.$d->id) }}">
         <div class="dashboard-list-item d-flex">

@@ -4,15 +4,13 @@
 <div class="d-flex ml-10x justify-content-space-between">
     <h2>Lain Group Team</h2>
     <div class="d-flex">
-        <form class="d-flex m-0" method="POST" id="search-team" action="{{route('teams.searchTeam')}}">
-            @csrf
-            <input type="text" name="inpsearchteam" class="input-text-merged-button">
-            <a type="submit" class="btn-merged-input btn" id="btn-search-team" href="#">Search</a>
-        </form>
+        @csrf
+        <input type="text" id="inpsearchteam" class="input-text-merged-button">
+        <a class="btn-merged-input btn" id="btn-search-team" href="#">Search</a>
         <a class="btn-normal btn ml-10x" href="{{route('teams.create')}}">Add Staff</a>
     </div>
 </div>
-<div class="flex-dir-col d-flex w-100p">
+<div class="flex-dir-col d-flex w-100p" id="team-list-wrapper">
     @foreach($data as $d)
         <div class="card p-10x team-list-item mt-15x">
             <div class="d-flex flex-dir-col">
@@ -25,7 +23,7 @@
                         </div>
                     </div>
                     <div>
-                        <a class="btn btn-normal" href="{{url('/teams/edit')}}">Edit</a>
+                        <a class="btn btn-normal" href="{{route('teams.edit', $d->username)}}">Edit</a>
                         <a class="ml-10x btn btn-warning" href="">Delete</a>
                     </div>
                 </div>

@@ -60,23 +60,40 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        $date = $request->get('deadline');
-        $dates = explode("T", $date);        
-        $deadline = date("Y-m-d H:i:s", strtotime($dates[0]." ".$dates[1]));
-        dd($deadline);
+        // $request->validate([
+        //     'name' => 'required',
+        //     'description' => 'required',
+        //     'jobcategories' => 'required',
+        //     'deadline' => 'required',
+        //     'email' => 'required',
+        //     'phonenumber' => 'required',
+        //     'instagram' => 'required',
+        //     'linkedin' => 'required',
+        // ]);
+
         $client = new Client();
-        $client->name = $request->get('name');
-        $client->description = $request->get('description');
-        $client->email = $request->get('email');
-        $client->phone_number = $request->get('phone_number');
-        $client->instagram = $request->get('instagram');
-        $client->linkedin = $request->get('linkedin');
+
+        //ganti ke kyk todo
+        $client->name = $request->name;
+        $client->description = $request->description;
+        $client->email = $request->email;
+        $client->phone_number = $request->phonenumber;
+        $client->instagram = $request->instagram;
+        $client->linkedin = $request->linkedin;
         $client->status = "in progress";
-        $client->deadline = $deadline;
-        $client->job_categories_id = $request->get('job_categories_id');
-        $client->photo_url = $request->get('photo_url');
-        // $client->save();
-        // return redirect()->route('clients.index');
+        $client->deadline = date("Y-m-d H:i:s",strtotime($request->deadline));
+        $client->job_categories_id = $request->jobcategories;
+        
+        $file = $request->file('inpclientphotourl');
+        $imgFolder = "assets/img";
+        $imgFile = strtolower(str_replace(' ', '', ($client->name))).'.'.$file->getClientOriginalExtension();
+        console.log($imgFile);
+        $file->move($imgFolder, $imgFile);
+        $client->photo_url = $imgFile;
+
+        $client->save();
+
+        // return response()->json(['success'=>'Successfully added new client']);
     }
 
     /**
@@ -162,20 +179,18 @@ class ClientController extends Controller
 
     public function searchClient(Request $request)
     {
-        $client = Client::where('name', 'like', "%".$request->inpsearchclient."%")->get();
-        $data = [];
+        $client = Client::where('name', 'like', "%".$request->search."%")->get();
+        $elements = "";
         foreach($client as $d) {
             $date = date("d M Y, H.i", strtotime($d->deadline));
             $tt = Todo::where('clients_id', '=', $d->id)->count();
             $td = Todo::where([['clients_id', '=', $d->id], ['done', '=', 1]])->count();
             $percentage = round(($td/$tt) * 100, 2);
 
-            $temp = array("data" => $d, "totalTask" => $tt, "taskDone" => $td, "formatted_date" => $date, "percentage" => $percentage);
-            array_push($data, $temp);
+            $elements .= '<a href="/clients/'.$d->id.'"><div class="card p-10x client-list-item mt-15x dashboard-list-item d-flex"><div class="d-flex w-70p item-align-center"><img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt=""><div class="ml-10x mr-10x w-100p"><div class="d-flex item-align-end"><p class="dashboard-item-header">'.$d->name.'</p><p class="font-12x ml-5x">'.$d->job_category->name.'</p></div><progress class="w-80p" id="progressclientdashboard" value="'.($td / $tt * 100).'" max="100"></progress><label for="progressclientdashboard" class="ml-5x font-14x">'.$percentage.'%</label><p class="font-12x">Task Done: '.$td.'/'.$tt.'</p></div></div><p class="font-12x text-align-right">Due '.$date.'</p> </div></a>';
         }
-        // dd($data);
 
-        return view('client.index', compact('data'));
+        return response()->json(['success'=>'Successfully searched client', 'elements'=>$elements]);
     }
 
     public function rangeEvent(Request $request){
