@@ -1,9 +1,9 @@
 @extends('layout.bar')
 
 @section('content')
-<div class="d-flex ml-10x justify-content-space-between">
+<div class="d-flex ml-10x justify-content-space-between header-wrapper">
     <h2>Events</h2>
-    <div class="d-flex">
+    <div class="d-flex search-add-wrapper">
         @csrf
         <input type="text" id="inpsearchevent" class="input-text-merged-button">
         <a class="btn-merged-input btn" id="btn-search-event" href="#">Search</a>
@@ -19,7 +19,7 @@
 @endif
 
 @if(session('error'))
-<div id="notification-delete-todo-fail" class="card-warning mt-15x p-15x d-flex item-align-center">
+<div id="notification-delete-event-fail" class="card-warning mt-15x p-15x d-flex item-align-center">
     <img src="{{asset('assets/img/light-bulb.png')}}" class="h-20x" alt="">
     <p class="ml-15x">{{session('error')}}</p>
 </div>

@@ -16,7 +16,11 @@ class EventController extends Controller
      */
     public function index()
     {
-        $data = DB::table('events as e')->join('clients as c', 'e.clients_id', '=', 'c.id')->select('e.*', 'c.name as client_name', 'c.photo_url')->get();
+        $data = DB::table('events as e')
+            ->join('clients as c', 'e.clients_id', '=', 'c.id')
+            ->select('e.*', 'c.name as client_name', 'c.photo_url')
+            ->orderBy('e.date')
+            ->get();
         return view('event.index', compact('data'));
     }
 
@@ -134,6 +138,7 @@ class EventController extends Controller
             ->join('clients as c', 'e.clients_id', '=', 'c.id')
             ->select('e.*', 'c.name as client_name', 'c.photo_url')
             ->where('e.title', 'like', "%".$request->search."%")
+            ->orderBy('e.date')
             ->get();
         
         $elements = "";

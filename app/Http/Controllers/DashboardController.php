@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Account;
 
 class DashboardController extends Controller
 {
@@ -11,9 +12,19 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $username = $request->session()->get('activeUser');
+        if ($username != null) {
+            $acc = Account::where('username', '=', $username)->get();
+            // dd($acc);
+            $role = $acc[0]->role;
+            $photo_url = $acc[0]->photo_url;
+            return view('dashboard.index', compact('username', 'role', 'photo_url'));
+        }
+        else {
+
+        }
     }
 
     /**

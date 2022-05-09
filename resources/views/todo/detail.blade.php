@@ -3,12 +3,14 @@
 @section('content')
 @csrf
 <div class="card p-20x">
-    <div class="d-flex item-align-center justify-content-space-between">
+    <div class="d-flex card-header-todo-detail">
         <div>
             <h2>{{ $data->name }}</h2>
-            <p class="font-12x"></p>
+            @if($client->id != 1)
+            <p class="font-12x">{{$client->name}}</p>
+            @endif
         </div>
-        <div class="d-flex item-align-center">
+        <div class="d-flex item-align-center header-second-row-todo-detail">
             <p class="font-12x">Due {{ $date }}</p>
             <div class="d-flex">
                 <a class="ml-15x btn btn-normal" href="{{url('/todos/'.$data->id.'/edit')}}">Edit</a>

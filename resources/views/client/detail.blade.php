@@ -3,18 +3,18 @@
 @section('content')
 @csrf
 <div class="card p-20x">
-    <div class="d-flex justify-content-space-between item-align-center">
-        <div class="d-flex item-align-center w-60p">
-            <img src="https://i.pravatar.cc/300" class="img-avatar h-100x" alt="">
+    <div class="d-flex client-detail-wrapper">
+        <div class="d-flex client-detail">
+            <img src="{{asset('assets/img/'.$data->photo_url)}}" class="img-avatar h-100x" alt="">
             <div class="w-100p ml-15x">
                 <h2>{{ $data->name }}</h2>
                 <p class="font-14x">{{ $data->job_category->name }}</p>
-                <progress id="progressclientdetail" class="w-80p mt-10x" value="{{ $td / $tt * 100 }}" max="100"></progress>
-                <label for="progressclientdetail" id="progresspercentage" class="font-14x color-white">{{ $percentage }}%</label>
+                <progress id="progressclientdetail" class="w-80p mt-10x" value="{{ $percentage * 100 }}" max="100"></progress>
+                <label for="progressclientdetail" id="progresspercentage" class="font-14x color-white">{{ $percentage * 100 }}%</label>
                 <p id="progressvalue" td={{$td}} tt={{$tt}} class="font-12x">Task Done: {{ $td }}/{{ $tt }}</p>
             </div>
         </div>
-        <div>
+        <div class="deadline-client-detail">
             <p class="font-14x text-align-right">Due {{ $date }}</p> 
             <div class="d-flex justify-content-end mt-3x" id="clientdonecard">
                 @if ($td == $tt)
@@ -26,12 +26,16 @@
         </div>
     </div>
     <div class="d-flex justify-content-end">
-        <a class="btn btn-normal" href="{{url('/client/edit')}}">Edit</a>
-        <a class="ml-10x btn btn-warning" href="">Delete</a>
+        <a class="btn btn-normal" href="{{url('/clients/'.$data->id.'/edit')}}">Edit</a>
+        <form method="POST" class="m-0 d-flex" id="delete-client-detail" action="{{url('clients/'.$data->id)}}">
+            @csrf
+            @method('DELETE')
+            <a id="btn-delete-client-detail" class="ml-10x btn btn-warning border-none" href="#">Delete</a>
+        </form>
     </div>
     <div class="divider mb-15x mt-15x"></div>
-    <p class="font-14x">{{ $data->description }}</p>
-    <div class="d-flex mt-15x">
+    <p class="font-14x">{!! nl2br($data->description) !!}</p>
+    <div class="d-flex mt-15x contact-client-detail">
         <div class="d-flex">
             <div class="d-flex flex-dir-col">
                 <p class="font-14x h-20x"><b>Email</b></p>
@@ -42,7 +46,7 @@
                 <p class="font-14x h-20x">{{ $data->phone_number }}</p>
             </div>
         </div> 
-        <div class="d-flex ml-60x">
+        <div class="d-flex contact-second-row-client-detail">
             <div class="d-flex flex-dir-col">
                 <p class="font-14x h-20x"><b>Instagram</b></p>
                 <p class="font-14x h-20x"><b>LinkedIn</b></p>
@@ -56,11 +60,11 @@
     <div class="divider mb-15x mt-15x"></div>
     <h4>Assigned to</h4>
     <div class="d-flex mt-10x flex-wrap">
-        @foreach($accountss as $a)
+        @foreach($collaborators as $a)
         <div class="position-relative">
             <div class="dashboard-tag-item font-12x item-align-center d-flex">
                 <img src="https://i.pravatar.cc/300" class="img-avatar h-20x mr-10x" alt="">
-                {{ $a[0]->name }}
+                {{ $a->name }}
             </div>
         </div>
         @endforeach
@@ -71,8 +75,8 @@
 </div>
 <div class="client-item-list-wrapper mt-15x">
 <div class="card p-20x">
-        <div class="justify-content-space-between d-flex mb-15x item-align-center">
-            <h3>Upcoming Events</h3>
+        <div class="d-flex mb-15x card-header-client-detail">
+            <h3 class="card-title-client-detail">Upcoming Events</h3>
             <div class="d-flex item-align-center">
                 <p class="mr-10x font-14x">Range: </p>
                 <select client="{{$data->id}}" class="pr-20x pl-20x" id="range-event-client-detail">
@@ -104,12 +108,12 @@
         </div>
         <p class="text-align-right pb-10x pt-10x">
             <br>
-            <a class="btn-normal btn" href="">Add Reminder</a>
+            <a class="btn-normal btn" href="{{route('events.create')}}">Add Reminder</a>
         </p>
     </div>
     <div class="card p-20x">
-        <div class="justify-content-space-between d-flex mb-15x">
-            <h3>To Dos</h3>
+        <div class="d-flex mb-15x card-header-client-detail">
+            <h3 class="card-title-client-detail">To Dos</h3>
             <div class="d-flex item-align-center">
                 <p class="mr-10x font-14x">Range: </p>
                 <select client="{{$data->id}}" class="pr-20x pl-20x" id="range-todo-client-detail">
@@ -145,16 +149,16 @@
         </div>
         <p class="text-align-right pb-10x pt-10x">
             <br>
-            <a class="btn-normal btn" href="{{url('/todo/create')}}">Add Todo</a>
+            <a class="btn-normal btn" href="{{route('todos.create')}}">Add Todo</a>
         </p>
     </div>
 </div>
-<div class="card p-20x d-flex justify-content-space-between item-align-center mt-15x">
-    <h3>Client's Notes</h3>
+<div class="card p-20x d-flex card-header-client-detail mt-15x">
+    <h3 class="card-title-client-detail">Client's Notes</h3>
     <div class="d-flex">
     <input type="text" class="input-text-merged-button">
         <a class="btn-merged-input btn" href="">Search</a>
-        <a class="btn-normal btn ml-10x" href="{{route('notes.create')}}">Create Note</a>
+        <a class="btn-normal btn ml-10x create-note-client-detail" href="{{route('notes.create')}}">Create Note</a>
     </div>
 </div>
 <div class="note-page-content">

@@ -19,15 +19,19 @@
             </div>
             <button class="ml-15x btn btn-normal" id="btn-new-todo">Save</button>
         </div>
-        <div class="d-flex item-align-center mt-10x">
-            <p class="font-14px d-flex">Deadline</p>
-            <input type="datetime-local" name="inptododeadline" required class="ml-10x pt-5x pb-5x pl-10x pr-10x">
-            <p class="font-14px ml-15x d-flex">Client</p>
-            <select class="ml-10x text-align-center h-30x pl-20x pr-20x" id="inptodoclientid">
-                @foreach($client as $c)
-                    <option value="{{ $c->id }}">{{ $c->name }}</option>
-                @endforeach
-            </select>
+        <div class="d-flex mt-10x input-todo-rows">
+            <div class="d-flex mr-15x item-align-center">
+                <p class="font-14px d-flex">Deadline</p>
+                <input type="datetime-local" name="inptododeadline" required class="ml-10x pt-5x pb-5x pl-10x pr-10x input-datetime">
+            </div>
+            <div class="d-flex item-align-center input-todo-second-rows">
+                <p class="font-14px d-flex">Client</p>
+                <select class="ml-10x text-align-center h-30x pl-20x pr-20x" id="inptodoclientid">
+                    @foreach($client as $c)
+                        <option value="{{ $c->id }}">{{ $c->name }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
         <div class="divider mt-15x mb-15x"></div>
         <div class="d-flex item-align-center h-30x">
@@ -41,16 +45,20 @@
         </div>
         <div class="d-flex mt-10x flex-wrap" id="add-todo-assign-list"></div>
         <div class="divider mt-15x mb-15x"></div>
-        <div class="d-flex item-align-center h-30x">
-            <p class="font-14px d-flex">Tag</p>
-            <select class="ml-10x text-align-center pl-20x pr-20x" name="" id="add-todo-add-tag-list">
-                @foreach($tag as $t)
-                    <option value="{{ $t->id }}">{{ $t->name }}</option>
-                @endforeach
-            </select>
-            <button class="btn pt-5x pb-5x ml-10x" id="btn-add-todo-add-tag">Add</button>
-            <input type="text" id="inpnewtag" class="input-text ml-10x w-x" placeholder="New Tag">
-            <button id="btn-new-tag" class="btn pt-5x pb-5x ml-10x">Create Tag</button>
+        <div class="d-flex input-todo-rows">
+            <div class="d-flex mr-10x item-align-center">
+                <p class="font-14px d-flex">Tag</p>
+                <select class="ml-10x text-align-center pl-20x pr-20x" name="" id="add-todo-add-tag-list">
+                    @foreach($tag as $t)
+                        <option value="{{ $t->id }}">{{ $t->name }}</option>
+                    @endforeach
+                </select>
+                <button class="btn pt-5x pb-5x ml-10x" id="btn-add-todo-add-tag">Add</button>
+            </div>
+            <div class="d-flex item-align-center input-todo-second-rows">
+                <input type="text" id="inpnewtag" class="input-text w-x" placeholder="New Tag">
+                <button id="btn-new-tag" class="btn pt-5x pb-5x ml-10x">Create Tag</button>
+            </div>
         </div>
         <div class="d-flex mt-10x flex-wrap" id="add-todo-tag-list"></div>
     </div>

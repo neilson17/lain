@@ -10,6 +10,7 @@ use App\Todo;
 use App\Account;
 use App\Event;
 use App\Note;
+use Illuminate\Support\Facades\File; 
 
 class ClientController extends Controller
 {
@@ -24,13 +25,13 @@ class ClientController extends Controller
         // $todo = Todo::where([['clients_id', '=', $data->id], ['done', '=', '0']])->count();
         // dd($todo);
  
-        $client = Client::all();
+        $client = Client::where('id', '<>', 1)->orderBy('deadline')->get();
         $data = [];
         foreach($client as $d) {
             $date = date("d M Y, H.i", strtotime($d->deadline));
             $tt = Todo::where('clients_id', '=', $d->id)->count();
             $td = Todo::where([['clients_id', '=', $d->id], ['done', '=', 1]])->count();
-            $percentage = round(($td/$tt) * 100, 2);
+            $percentage = ($tt != 0) ? round(($td/$tt), 2) : 0;
 
             $temp = array("data" => $d, "totalTask" => $tt, "taskDone" => $td, "formatted_date" => $date, "percentage" => $percentage);
             array_push($data, $temp);
@@ -60,39 +61,26 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required',
-        //     'description' => 'required',
-        //     'jobcategories' => 'required',
-        //     'deadline' => 'required',
-        //     'email' => 'required',
-        //     'phonenumber' => 'required',
-        //     'instagram' => 'required',
-        //     'linkedin' => 'required',
-        // ]);
-
         $client = new Client();
-
-        //ganti ke kyk todo
-        $client->name = $request->name;
-        $client->description = $request->description;
-        $client->email = $request->email;
-        $client->phone_number = $request->phonenumber;
-        $client->instagram = $request->instagram;
-        $client->linkedin = $request->linkedin;
+        $client->name = $request->get('inpclientname');
+        $client->description = $request->get('inpclientdescription');
+        $client->email = $request->get('inpclientemail');
+        $client->phone_number = $request->get('inpclientphonenumber');
+        $client->instagram = $request->get('inpclientinstagram');
+        $client->linkedin = $request->get('inpclientlinkedin');
         $client->status = "in progress";
-        $client->deadline = date("Y-m-d H:i:s",strtotime($request->deadline));
-        $client->job_categories_id = $request->jobcategories;
+        $client->deadline = date("Y-m-d H:i:s",strtotime($request->get('inpclientdeadline')));
+        $client->job_categories_id = $request->get('job_categories_id');
         
         $file = $request->file('inpclientphotourl');
         $imgFolder = "assets/img";
         $imgFile = strtolower(str_replace(' ', '', ($client->name))).'.'.$file->getClientOriginalExtension();
-        console.log($imgFile);
         $file->move($imgFolder, $imgFile);
         $client->photo_url = $imgFile;
 
         $client->save();
 
+        return redirect()->route('clients.index')->with('status', 'Successfully added new client!');
         // return response()->json(['success'=>'Successfully added new client']);
     }
 
@@ -106,7 +94,7 @@ class ClientController extends Controller
     {
         $tt = Todo::where('clients_id', '=', $client->id)->count();
         $td = Todo::where([['clients_id', '=', $client->id], ['done', '=', 1]])->count();
-        $percentage = round(($td/$tt) * 100, 2);
+        $percentage = ($tt != 0) ? round(($td/$tt), 2) : 0;
         $data = $client;
         $date = date("d M Y, H.i", strtotime($client->deadline));
         $todos = Todo::where('clients_id', '=', $client->id)
@@ -114,17 +102,15 @@ class ClientController extends Controller
             ->orderBy('deadline')
             ->get();
 
+        $todos_unfiltered = Todo::where('clients_id', '=', $client->id)->get();
         $accounts = [];
-        foreach($todos as $d) {
+        foreach($todos_unfiltered as $d) {
             $account = $d->accounts;
             foreach($account as $a) {
                 array_push($accounts, $a->username);
             }
         }
-        $accounts = array_unique($accounts);
-        $accountss = [];
-        foreach($accounts as $a)
-            array_push($accountss, Account::where('username', '=', $a)->get());
+        $collaborators = Account::find(array_unique($accounts));
 
         $events = Event::where('clients_id', '=', $data->id)
             ->whereBetween('date', [DB::raw('curdate()'), DB::raw('date_add(curdate(), interval 1 day)')])
@@ -140,7 +126,7 @@ class ClientController extends Controller
             else array_push($private, $n);
         }
 
-        return view('client.detail', compact('data', 'date', 'tt', 'td', 'percentage', 'accountss', 'events', 'todos', 'public', 'private'));
+        return view('client.detail', compact('data', 'date', 'tt', 'td', 'percentage', 'collaborators', 'events', 'todos', 'public', 'private'));
     }
 
     /**
@@ -151,7 +137,9 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
-        //
+        $data = $client;
+        $deadline = date("Y-m-d\TH:i",strtotime($data->deadline));
+        return view('client.edit', compact('data', 'deadline'));
     }
 
     /**
@@ -163,7 +151,26 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        //
+        $client->name = $request->get('name');
+        $client->description = $request->get('description');
+        $client->deadline = date("Y-m-d H:i:s",strtotime($request->get('deadline')));
+        $client->email = $request->get('email');
+        $client->phone_number = $request->get('phone_number');
+        $client->instagram = $request->get('instagram');
+        $client->linkedin = $request->get('linkedin');
+
+        if ($request->hasFile('image')) {
+            File::delete($client->photo_url);
+            $file = $request->file('image');
+            $imgFolder = "assets/img";
+            $imgFile = strtolower(str_replace(' ', '', ($client->name))).'.'.$file->getClientOriginalExtension();
+            $file->move($imgFolder, $imgFile);
+            $client->photo_url = $imgFile;
+        }
+
+        $client->save();
+
+        return redirect()->route('clients.index')->with('status', 'Successfully edited client!');
     }
 
     /**
@@ -174,20 +181,57 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        //
+        try{
+            $todos = Todo::where('clients_id', $client->id)->get();
+            foreach($todos as $t){
+                $t->accounts()->detach();
+                $t->tags()->detach();
+                $t->delete();
+            }
+
+            $events = Event::where('clients_id', $client->id)->get();
+            foreach($events as $e){
+                $e->delete();
+            }
+
+            $notes = Note::where('clients_id', $client->id)->get();
+            foreach($notes as $n){
+                // Kalo note yang private bakal diganti ke clients_id = 1
+                if ($n->type == "private"){
+                    $n->clients_id = 1;
+                    $n->save();
+                }
+                else{
+                    $n->delete();
+                }
+            }
+
+            $client->delete();
+
+            return redirect()->route('clients.index')->with('deletesuccess',
+            'Successfully deleted client!');
+        }
+        catch(\PDOException $e)
+        {
+            $msg = 'Failed to delete client!'. $e;
+            return redirect()->route('clients.index')->with('deleteerror', $msg);
+        }
     }
 
     public function searchClient(Request $request)
     {
-        $client = Client::where('name', 'like', "%".$request->search."%")->get();
+        $client = Client::where('name', 'like', "%".$request->search."%")
+            ->orderBy('deadline')
+            ->get();
         $elements = "";
         foreach($client as $d) {
             $date = date("d M Y, H.i", strtotime($d->deadline));
             $tt = Todo::where('clients_id', '=', $d->id)->count();
             $td = Todo::where([['clients_id', '=', $d->id], ['done', '=', 1]])->count();
-            $percentage = round(($td/$tt) * 100, 2);
+            if ($tt != 0) $percentage = round(($td/$tt) * 100, 2);
+            else $percentage = 0;
 
-            $elements .= '<a href="/clients/'.$d->id.'"><div class="card p-10x client-list-item mt-15x dashboard-list-item d-flex"><div class="d-flex w-70p item-align-center"><img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt=""><div class="ml-10x mr-10x w-100p"><div class="d-flex item-align-end"><p class="dashboard-item-header">'.$d->name.'</p><p class="font-12x ml-5x">'.$d->job_category->name.'</p></div><progress class="w-80p" id="progressclientdashboard" value="'.($td / $tt * 100).'" max="100"></progress><label for="progressclientdashboard" class="ml-5x font-14x">'.$percentage.'%</label><p class="font-12x">Task Done: '.$td.'/'.$tt.'</p></div></div><p class="font-12x text-align-right">Due '.$date.'</p> </div></a>';
+            $elements .= '<a href="/clients/'.$d->id.'"><div class="card p-10x client-list-item mt-15x dashboard-list-item d-flex"><div class="d-flex w-70p item-align-center"><img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt=""><div class="ml-10x mr-10x w-100p"><div class="d-flex item-align-end"><p class="dashboard-item-header">'.$d->name.'</p><p class="font-12x ml-5x">'.$d->job_category->name.'</p></div><progress class="w-80p" id="progressclientdashboard" value="'.($tt != 0 ? $td / $tt * 100 : 0).'" max="100"></progress><label for="progressclientdashboard" class="ml-5x font-14x">'.$percentage.'%</label><p class="font-12x">Task Done: '.$td.'/'.$tt.'</p></div></div><p class="font-12x text-align-right">Due '.$date.'</p> </div></a>';
         }
 
         return response()->json(['success'=>'Successfully searched client', 'elements'=>$elements]);
@@ -257,5 +301,10 @@ class ClientController extends Controller
         }
 
         return response()->json(['success'=>'Successfully updated range on todos', 'elements'=>$elements]);
+    }
+
+    public function showClient() {
+        $client = Client::all();
+        dd($client);
     }
 }

@@ -2,22 +2,14 @@
 
 @section('content')
 <h2 class="ml-20x">Add Client</h2>
-<form enctype="multipart/form-data">
-<div id="notification-add-client-success" class="d-none mt-15x card-progress p-15x d-flex item-align-center">
-    <img src="{{asset('assets/img/light-bulb.png')}}" class="h-20x" alt="">
-    <p class="ml-15x">Successfully added new client</p>
-</div>
-<div id="notification-add-client-fail" class="d-none card-warning mt-15x p-15x d-flex item-align-center">
-    <img src="{{asset('assets/img/light-bulb.png')}}" class="h-20x" alt="">
-    <p class="ml-15x">Failed to add new client</p>
-</div>
+<form role="form" method="POST" action="{{url('clients')}}" enctype="multipart/form-data">
     @csrf
-    <div class="d-flex justify-content-space-evenly mt-15x">
-        <div class="d-flex flex-dir-col">
-            <img src="https://i.pravatar.cc/300" alt="" class="w-175x img-avatar">
-            <input type="file" class="mt-15x" accept=".jpg, .jpeg, .png" name="inpclientphotourl" id="inpclientphotourl">
+    <div class="d-flex justify-content-space-evenly mt-15x edit-team-wrapper">
+        <div class="d-flex flex-dir-col image-edit-team-wrapper">
+            <img src="https://i.pravatar.cc/300" alt="" class="w-175x img-avatar" id="preview-image">
+            <input type="file" class="mt-15x" accept=".jpg, .jpeg, .png" name="inpclientphotourl" id="image">
         </div>
-        <div class="d-flex flex-dir-col w-50p">
+        <div class="d-flex flex-dir-col form-edit-team-wrapper">
             <div class="w-100p">
                 <p class="font-14x">Name</p>
                 <input type="text" class="input-text mt-3x w-100p" name="inpclientname">
@@ -36,12 +28,12 @@
             </div>
             <div class="w-100p mt-15x">
                 <p class="font-14x">Deadline</p>
-                <input type="datetime-local" class="pt-5x pb-5x pl-10x mt-3x pr-10x" name="inpclientdeadline" id="inpclientdeadline">
+                <input type="datetime-local" class="pt-5x pb-5x pl-10x mt-3x pr-10x input-datetime" name="inpclientdeadline" id="inpclientdeadline">
             </div>
             <div class="divider mt-15x"></div>
             <div class="w-100p mt-15x">
                 <p class="font-14x">Email</p>
-                <input type="text" class="input-text mt-3x w-100p" name="email" id="inpclientemail">
+                <input type="text" class="input-text mt-3x w-100p" name="inpclientemail" id="inpclientemail">
             </div>
             <div class="w-100p mt-15x">
                 <p class="font-14x">Phone Number</p>
@@ -57,7 +49,7 @@
             </div>
             <br>
             <p class="text-align-right h-40x">
-                <button class="ml-15x btn btn-normal d-inline-flex" id="btn-new-client">Save</button>
+                <button type="submit" class="ml-15x btn btn-normal d-inline-flex">Save</button>
             </p>
         </div>
     </div>
@@ -65,7 +57,7 @@
 @endsection
 
 @section('javascript')
-<script src="{{asset('assets/js/add-client.js')}}"></script>
+<script src="{{asset('assets/js/main.js')}}"></script>
 @endsection
 
 @section('client-active')

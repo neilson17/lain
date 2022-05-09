@@ -8,11 +8,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body class="home d-flex">
-    <div class="sidebar d-flex">
+    <div id="sidebar" class="d-flex">
         <div class="img-logo-sidebar-wrapper">
-            <img class="w-100p" src="{{asset('assets/img/Vector.png')}}" alt="">
+            <img id="menu-logo" src="{{asset('assets/img/Vector.png')}}" alt="">
         </div>
-        <div class="sidebar-list-wrapper d-flex h-100p mt-15x">
+        <div id="wrapper-menu" class="sidebar-list-wrapper d-flex mt-15x">
             <div class="sidebar-list-wrapper d-flex">
                 <a href="{{url('/dashboard')}}" class="@yield('dashboard-active')">
                     <div class="sidebar-list-item d-flex">
@@ -80,7 +80,7 @@
                         <h3 class="text-list-sidebar">Settings</h3>
                     </div>
                 </a>
-                <a href="">
+                <a href="/api/logout">
                     <div class="sidebar-list-item d-flex">
                         <div class="icon-list-sidebar-wrapper">
                             <img src="{{asset('assets/icons/icon-7.png')}}" class="icon-list-sidebar" alt="">
@@ -92,19 +92,24 @@
         </div>
     </div>
     <div class="content d-flex">
-        <div class="header-wrapper">
+        <div class="header-bar-wrapper">
             <div class="header card d-flex">
-                <div class="account-info-header d-flex">
-                    <h3>Centong Hitam</h3>
-                    <p>Admin</p>
+                <img src="{{asset('assets/icons/icon-10.png')}}" id="hamburger-menu" class="icon-list-sidebar" alt="">
+                <div class="d-flex img-top-bar">
+                    <div class="account-info-header d-flex">
+                        <h3>username</h3>
+                        <p>role</p>
+                    </div>
+                    <img class="img-avatar h-100p" src="https://i.pravatar.cc/300" alt="">
                 </div>
-                <img class="img-avatar h-100p" src="https://i.pravatar.cc/300" alt="">
             </div>
         </div>
         <div class="page-content-wrapper">
             @yield('content')
         </div>
     </div>
+    <img src="{{asset('assets/icons/icon-11.png')}}" id="close-hamburger" class="h-40x" alt="">
     @yield('javascript')
+    <script src="{{asset('assets/js/hamburger.js')}}"></script>
 </body>
 </html>

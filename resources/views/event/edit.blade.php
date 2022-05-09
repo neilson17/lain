@@ -21,15 +21,19 @@
             </div>
             <button id="btn-edit-event" class="ml-15x btn btn-normal">Save</button>
         </div>
-        <div class="d-flex item-align-center mt-10x">
-            <p class="font-14px d-flex">Due</p>
-            <input type="datetime-local" name="inpdate" value="{{date('Y-m-d\TH:i', strtotime($data->date))}}" class="ml-10x pt-5x pb-5x pl-10x pr-10x">
-            <p class="font-14px ml-15x d-flex">Client</p>
-            <select class="ml-10x text-align-center h-30x pl-20x pr-20x" id="inpclientid">
-                @foreach($client as $c)
-                    <option value="{{ $c->id }}" @if($c->id == $data->clients_id) selected @endif>{{ $c->name }}</option>
-                @endforeach
-            </select>
+        <div class="d-flex mt-10x input-todo-rows">
+            <div class="d-flex mr-15x item-align-center">
+                <p class="font-14px d-flex">Due</p>
+                <input type="datetime-local" name="inpdate" value="{{date('Y-m-d\TH:i', strtotime($data->date))}}" class="ml-10x pt-5x pb-5x pl-10x pr-10x input-datetime">
+            </div>
+            <div class="d-flex item-align-center input-todo-second-rows">
+                <p class="font-14px d-flex">Client</p>
+                <select class="ml-10x text-align-center h-30x pl-20x pr-20x" id="inpclientid">
+                    @foreach($client as $c)
+                        <option value="{{ $c->id }}" @if($c->id == $data->clients_id) selected @endif>{{ $c->name }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
     <div class="divider mt-15x mb-15x"></div>
     <textarea id="inpdescription" id="" cols="30" rows="10" class="input-text w-100p mw-100p"  placeholder="Event Description">{{$data->description}}</textarea>

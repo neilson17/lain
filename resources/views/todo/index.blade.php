@@ -1,9 +1,9 @@
 @extends('layout.bar')
 
 @section('content')
-<div class="d-flex ml-10x mb-15x justify-content-space-between">
+<div class="d-flex ml-10x mb-15x justify-content-space-between header-wrapper">
     <h2>Todo</h2>
-    <div class="d-flex">
+    <div class="d-flex search-add-wrapper">
         @csrf
         <input type="text" id="inpsearchtodo" class="input-text-merged-button">
         <a class="btn-merged-input btn" id="btn-search-todo" href="#">Search</a>

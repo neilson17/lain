@@ -21,19 +21,22 @@
             </div>
             <button id="btn-new-note" class="ml-15x btn btn-normal">Save</button>
         </div>
-        <br>
-        <div class="d-flex item-align-center">
-            <p class="font-14px d-flex">Type</p>
-            <select class="ml-10x text-align-center pl-20x pr-20x" name="inpnotetype" id="inpnotetype">
-                <option value="private">Private</option>
-                <option value="public">Public</option>
-            </select>
-            <p class="ml-30x font-14px d-flex">Client</p>
-            <select class="ml-10x text-align-center pl-20x pr-20x" name="inpnoteclientsid" id="inpnoteclientsid">
-                @foreach($client as $c)
-                    <option value="{{ $c->id }}">{{ $c->name }}</option>
-                @endforeach
-            </select>
+        <div class="d-flex mt-10x input-todo-rows">
+            <div class="d-flex mr-15x item-align-center">
+                <p class="font-14px d-flex">Type</p>
+                <select class="ml-10x text-align-center pl-20x h-30x pr-20x" name="inpnotetype" id="inpnotetype">
+                    <option value="private">Private</option>
+                    <option value="public">Public</option>
+                </select>
+            </div>
+            <div class="d-flex item-align-center input-todo-second-rows">
+                <p class="font-14px d-flex">Client</p>
+                <select class="ml-10x text-align-center pl-20x h-30x pr-20x" name="inpnoteclientsid" id="inpnoteclientsid">
+                    @foreach($client as $c)
+                        <option value="{{ $c->id }}">{{ $c->name }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
     </div>
     <div class="divider mt-10x mb-10x"></div>

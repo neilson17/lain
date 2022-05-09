@@ -16,10 +16,12 @@ class NoteController extends Controller
      */
     public function index()
     {
+        $user = session()->get('activeUser');
         $notes = DB::table('notes as n')
             ->join('clients as c', 'n.clients_id', '=', 'c.id')
-            ->where('accounts_username', '=', 'admin')
+            ->where('accounts_username', '=', $user)
             ->select('n.*', 'c.name')
+            ->orderBy('n.date', 'DESC')
             ->get();
 
         $public = $private = [];
@@ -57,7 +59,7 @@ class NoteController extends Controller
         //     'clients_id' => 'required',
         //     'content' => 'required',
         // ]);
-
+        $user = session()->get('activeUser');
         date_default_timezone_set('Asia/Jakarta');
         $date = date('Y-m-d H:i:s');
         $data = new Note();
@@ -66,7 +68,7 @@ class NoteController extends Controller
         $data->date = $date;
         $data->type = $request->type;
         $data->clients_id = $request->clients_id;
-        $data->accounts_username = "admin";
+        $data->accounts_username = $user;
 
         // dd($data);
         $data->save();
@@ -98,7 +100,9 @@ class NoteController extends Controller
      */
     public function edit(Note $note)
     {
-        return view('note.edit');
+        $data = $note;
+        $client = Client::all();
+        return view('note.edit', compact('data', 'client'));
     }
 
     /**
@@ -110,7 +114,22 @@ class NoteController extends Controller
      */
     public function update(Request $request, Note $note)
     {
-        //
+        $request->validate([
+            'noteid' => 'required',
+            'title' => 'required',
+            'type' => 'required',
+            'clients_id' => 'required',
+        ]);
+
+        $note = Note::find($request->get('noteid'));
+        $note->title = $request->get('title');
+        $note->type = $request->get('type');
+        $note->content = $request->get('content');
+        $note->clients_id = $request->get('clients_id');
+        $note->date = date("Y-m-d H:i:s", strtotime(now('Asia/Jakarta')->toDateTimeString()));
+        $note->save();
+        
+        return response()->json(['success'=>"Successfully edited note"]);
     }
 
     /**
@@ -121,11 +140,21 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
-        //
+        try{
+            $note->delete();
+            return redirect()->route('notes.index')->with('status',
+            'Successfully deleted note!');
+        }
+        catch(\PDOException $e)
+        {
+            $msg = 'Failed to delete note!'. $e;
+            return redirect()->route('events.index')->with('error', $msg);
+        }
     }
 
     public function showNote() {
-        $notes = DB::table('notes')->where('accounts_username', '=', 'admin')->get();
+        $user = session()->get('activeUser');
+        $notes = DB::table('notes')->where('accounts_username', '=', $user)->get();
 
         $public = $private = [];
 
@@ -150,11 +179,13 @@ class NoteController extends Controller
 
     public function searchNote(Request $request)
     {
+        $user = session()->get('activeUser');
         $notes = DB::table('notes as n')
             ->join('clients as c', 'n.clients_id', '=', 'c.id')
-            ->where('accounts_username', '=', 'admin')
+            ->where('accounts_username', '=', $user)
             ->select('n.*', 'c.name')
             ->where('n.title', 'like', "%".$request->search."%")
+            ->orderBy('n.date', 'DESC')
             ->get();
 
         $privateelements = "";

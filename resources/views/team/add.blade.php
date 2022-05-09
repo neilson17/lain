@@ -4,8 +4,8 @@
 <h2 class="ml-20x">Add Staff</h2>
 <form role="form" method="POST" action="{{url('teams')}}">
     @csrf
-    <div class="d-flex mt-15x ml-20x">
-        <div class="d-flex flex-dir-col w-50p">
+    <div class="d-flex add-team-wrapper">
+        <div class="d-flex flex-dir-col form-edit-team-wrapper">
             <div class="w-100p">
                 <p class="font-14x">Username</p>
                 <input type="text" class="input-text mt-3x w-100p" name="username">
@@ -24,7 +24,6 @@
             <br>
             <p class="text-align-right h-40x">
                 <button class="ml-15x btn btn-normal d-inline-flex" type="submit">Save</button>
-                <!-- <a class="ml-15x btn btn-normal d-inline-flex" href="">Save</a> -->
             </p>
         </div>
     </div>

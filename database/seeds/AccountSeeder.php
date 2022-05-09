@@ -17,6 +17,7 @@ class AccountSeeder extends Seeder
             'password' => 'admin',
             'role' => 'Admin',
             'email' => 'admin@gmail.com',
+            'active' => 1,
             'phone_number' => '081234567899',
             'line' => 'adminadmin',
             'instagram' => 'admin123',

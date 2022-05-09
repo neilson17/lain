@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Account;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\File;
 
 class AccountController extends Controller
 {
@@ -15,9 +16,8 @@ class AccountController extends Controller
      */
     public function index()
     {
-        $data = Account::all();
+        $data = Account::where('active', 1)->get();
         return view('team.index', compact('data'));
-        // dd($data);
     }
 
     /**
@@ -43,8 +43,9 @@ class AccountController extends Controller
         $data->name = $request->get('name');
         $data->role = $request->get('role');
         $data->photo_url = "default.jpg";
+        $data->active = 1;
         $data->save();
-        return redirect()->route('teams.index');
+        return redirect()->route('teams.index')->with('status', 'Successfully created new account!');
     }
 
     /**
@@ -56,7 +57,7 @@ class AccountController extends Controller
     public function show(Account $account)
     {
         $acc = $account;
-        dd($acc);
+        return view('team.edit', compact('acc'));
     }
 
     /**
@@ -65,10 +66,15 @@ class AccountController extends Controller
      * @param  \App\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function edit(Account $account)
+    public function edit(Account $account, $username)
     {
-        dd($account);
-        // return view('team.edit');
+        $data = Account::find($username);
+        $role = ['employee' => 'Employee', 'admin' => 'Admin'];
+        // $role = ['employee', 'admin'];
+        // dd($role);
+        // $data = $account;
+        // dd($data);
+        return view('team.edit', compact('data', 'role'));
     }
 
     /**
@@ -80,7 +86,29 @@ class AccountController extends Controller
      */
     public function update(Request $request, Account $account)
     {
-        //
+        $username = $request->get('username');
+        $data = Account::find($username);
+        $data->name = $request->get('name');
+        $data->role = $request->get('role');
+        $data->email = $request->get('email');
+        $data->phone_number = $request->get('phone_number');
+        $data->line = $request->get('line');
+        $data->instagram = $request->get('instagram');
+        $data->linkedin = $request->get('linkedin');
+        $data->address = $request->get('address');
+
+        if ($request->hasFile('image')) {
+            File::delete($data->photo_url);
+            $file = $request->file('image');
+            $imgFolder = "assets/img";
+            $imgFile = strtolower(str_replace(' ', '', ($data->username))).'.'.$file->getClientOriginalExtension();
+            $file->move($imgFolder, $imgFile);
+            $data->photo_url = $imgFile;
+        }
+
+        $data->save();
+
+        return redirect()->route('teams.index')->with('status', 'Successfully edited account!');
     }
 
     /**
@@ -89,13 +117,57 @@ class AccountController extends Controller
      * @param  \App\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Account $account)
+    public function destroy(Account $account, Request $request)
     {
-        //
+        $account = Account::find($request->inpdelusername);
+        $account->active = 0;
+        $account->save();
+
+        return redirect()->route('teams.index')->with('status',
+            'Successfully deleted account!');
+    }
+
+    public function showSetting() {
+        $user = session()->get('activeUser');
+        $data = Account::find($user);
+        return view('setting.index', compact('data'));
+    }
+
+    public function updateProfile(Request $request) {
+        // $comp = strcmp($request->get('password'), $request->get('repeat_password'));
+        if (strcmp($request->get('password'), $request->get('repeat_password')) == 0) {
+            $username = session()->get('activeUser');
+            $data = Account::find($username);
+            
+            $data->name = $request->get('name');
+            $data->password = $request->get('password');
+            $data->role = $request->get('role');
+            $data->email = $request->get('email');
+            $data->phone_number = $request->get('phone_number');
+            $data->line = $request->get('line');
+            $data->instagram = $request->get('instagram');
+            $data->linkedin = $request->get('linkedin');
+            $data->address = $request->get('address');
+    
+            if ($request->hasFile('image')) {
+                File::delete($data->photo_url);
+                $file = $request->file('image');
+                $imgFolder = "assets/img";
+                $imgFile = strtolower(str_replace(' ', '', ($data->username))).'.'.$file->getClientOriginalExtension();
+                $file->move($imgFolder, $imgFile);
+                $data->photo_url = $imgFile;
+            }
+    
+            $data->save();
+    
+            return redirect()->action('AccountController@showSetting')->with('status', 'Successfully edited account!');
+        }
+        else {
+            return redirect()->action('AccountController@showSetting')->with('error', 'Password is not the same');
+        }
     }
 
     public function test($username, $password) {
-        // public function test() {
         $result=Account::where([
             ['username', '=', $username], 
             ['password', '=', $password]
@@ -117,19 +189,38 @@ class AccountController extends Controller
             ['username', '=', $username], 
             ['password', '=', $password]
         ])->get();
-
+        // $role = $account->role;
+        // dd($account);
         if (count($account) == 0) return response()->json(array('status'=>'fail'));
-        else return response()->json(array('status'=>'success'));
+        else {
+            session()->put('activeUser', $username);
+            session()->put('activeRole', $account[0]->role);
+            session()->put('activePhoto', $account[0]->photo_url);
+            
+            return response()->json(array('status'=>'success'));
+        }
     }
 
-    public function showAccount() {
+    public function logout() {
+        session()->forget('activeUser');
+        session()->forget('activeRole');
+        session()->forget('activePhoto');
+        return view('login.index');
+    }
+
+    public function showAccount(Request $request) {
         $account = Account::all();
-        dd($account);
+        // $request->session()->forget('activeUser');
+        $user = session()->get('activeUser');
+        $role = session()->get('activeRole');
+        // dd($user);
+        // dd($account);
+        dd($user);
     }
 
     public function searchTeam(Request $request)
     {
-        $data = Account::where('name', 'like', "%".$request->search."%")->get();
+        $data = Account::where('name', 'like', "%".$request->search."%")->where('active', 1)->get();
 
         $elements = "";
         foreach($data as $a){

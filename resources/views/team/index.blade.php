@@ -1,30 +1,43 @@
 @extends('layout.bar')
 
 @section('content')
-<div class="d-flex ml-10x justify-content-space-between">
+<div class="d-flex ml-10x justify-content-space-between header-wrapper">
     <h2>Lain Group Team</h2>
-    <div class="d-flex">
+    <div class="d-flex search-add-wrapper">
         @csrf
         <input type="text" id="inpsearchteam" class="input-text-merged-button">
         <a class="btn-merged-input btn" id="btn-search-team" href="#">Search</a>
-        <a class="btn-normal btn ml-10x" href="{{route('teams.create')}}">Add Staff</a>
+        <a class="btn-normal btn ml-10x btn-add" href="{{route('teams.create')}}">Add Staff</a>
     </div>
 </div>
-<div class="flex-dir-col d-flex w-100p" id="team-list-wrapper">
+
+@if(session('status'))
+<div id="notification-delete-event-success" class="mt-15x card-progress p-15x d-flex item-align-center">
+    <img src="{{asset('assets/img/light-bulb.png')}}" class="h-20x" alt="">
+    <p class="ml-15x">{{ session('status') }}</p>
+</div>
+@endif
+
+<div class="flex-dir-col d-flex w-100p mt-15x" id="team-list-wrapper">
     @foreach($data as $d)
         <div class="card p-10x team-list-item mt-15x">
             <div class="d-flex flex-dir-col">
                 <div class="d-flex item-align-center justify-content-space-between">
                     <div class="d-flex item-align-center">
-                        <img class="img-avatar h-50x" src="https://i.pravatar.cc/300" alt="">
+                        <img class="img-avatar h-50x" src="{{asset('assets/img/'.$d->photo_url)}}" alt="">
                         <div class="ml-10x">
                             <p class="dashboard-item-header">{{ $d->name }}</p>
                             <p class="font-12x">{{ $d->role }}</p>
                         </div>
                     </div>
-                    <div>
-                        <a class="btn btn-normal" href="{{route('teams.edit', $d->username)}}">Edit</a>
-                        <a class="ml-10x btn btn-warning" href="">Delete</a>
+                    <div class="d-flex">
+                        <a class="btn btn-normal" href="{{url('/teams/'.$d->username.'/edit')}}">Edit</a>
+                        <form method="POST" class="m-0 d-flex" id="delete-team-{{$d->username}}" action="{{url('teams/deleteaccount')}}">
+                            @csrf
+                            @method('DELETE')
+                            <input type="hidden" name="inpdelusername" value="{{$d->username}}">
+                            <a username="{{$d->username}}" class="btn-delete-team ml-10x btn btn-warning border-none" href="#">Delete</a>
+                        </form>
                     </div>
                 </div>
                 <div class="divider mt-15x"></div>

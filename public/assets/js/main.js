@@ -38,6 +38,19 @@ $('#ajax-login').on('click', function () {
 });
 
 // ========================================================================
+// Photo Preview
+// ========================================================================
+$(document).ready(function (e) {
+    $('#image').change(function(){    
+        let reader = new FileReader();
+        reader.onload = (e) => { 
+        $('#preview-image').attr('src', e.target.result); 
+        }
+        reader.readAsDataURL(this.files[0]); 
+    });
+});
+
+// ========================================================================
 // Todo List
 // ========================================================================
 $("#btn-search-todo").on('click', function(){
@@ -114,6 +127,51 @@ $("#btn-search-note").on('click', function(){
         },
         error: function(response) {
             console.log("Error while searching notes");
+        },
+    });
+});
+
+// ========================================================================
+// Note Detail
+// ========================================================================
+$("#btn-delete-note-detail").on('click', function(){
+    let confirmAction = "Are you sure to delete this note?";
+    if (confirm(confirmAction)){
+        $("#delete-note-detail").submit();
+    }
+    else alert("Delete canceled");
+});
+
+// ========================================================================
+// Note Edit
+// ========================================================================
+$("#btn-edit-note").on('click', function(e){
+    var noteid = $("#inpnoteid").val();
+    var title = $('input[name="inpnotetitle"]').val();
+    var type = $('#inpnotetype option:selected').val();
+    var clients_id = $('#inpnoteclientsid option:selected').val();
+    var content = $("#inpnotecontent").val();
+    var token_name = $('input[name="_token"]').val();
+    $.ajax({
+        url: "/api/editnote",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            noteid: noteid,
+            title: title,
+            type: type,
+            clients_id: clients_id,
+            content: content,
+        },
+        success:function(response){
+            e.preventDefault();
+            $("#notification-edit-note-success").removeClass("d-none");
+            console.log(response.success);
+        },
+        error: function(response) {
+            e.preventDefault();
+            $("#notification-edit-note-fail").removeClass("d-none");
+            console.log("Error while editing note");
         },
     });
 });
@@ -211,6 +269,14 @@ $("#btn-search-team").on('click', function(){
     });
 });
 
+$(".btn-delete-team").on('click', function(){
+    let confirmAction = "Are you sure to set this account to inactive?";
+    if (confirm(confirmAction)){
+        $("#delete-team-" + $(this).attr('username')).submit();
+    }
+    else alert("Delete canceled");
+});
+
 // ========================================================================
 // Client List
 // ========================================================================
@@ -230,7 +296,7 @@ $("#btn-search-client").on('click', function(){
             $("#client-list-wrapper").html(response.elements);
         },
         error: function(response) {
-            console.log("Error while searching teams");
+            console.log("Error while searching clients");
         },
     });
 });
@@ -238,6 +304,13 @@ $("#btn-search-client").on('click', function(){
 // ========================================================================
 // Client Detail
 // ========================================================================
+$("#btn-delete-client-detail").on('click', function(){
+    let confirmAction = "Are you sure to delete this client and all its todos, notes, and events?";
+    if (confirm(confirmAction)){
+        $("#delete-client-detail").submit();
+    }
+    else alert("Delete canceled");
+});
 
 $(".done-todo-client-detail").on('click', function(){
     var todoid = $(this).attr('id');

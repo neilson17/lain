@@ -1,15 +1,30 @@
 @extends('layout.bar')
 
 @section('content')
-<div class="d-flex ml-10x mb-15x justify-content-space-between">
+<div class="d-flex ml-10x mb-15x justify-content-space-between header-wrapper">
     <h2>Notes</h2>
-    <div class="d-flex">
+    <div class="d-flex search-add-wrapper">
         @csrf
         <input type="text" id="inpsearchnote" class="input-text-merged-button">
         <a class="btn-merged-input btn" id="btn-search-note" href="#">Search</a>
         <a class="btn-normal btn ml-10x" href="{{route('notes.create')}}">Create Note</a>
     </div>
 </div>
+
+@if(session('status'))
+<div id="notification-delete-note-success" class="mt-15x card-progress p-15x d-flex item-align-center">
+    <img src="{{asset('assets/img/light-bulb.png')}}" class="h-20x" alt="">
+    <p class="ml-15x">Successfully deleted note</p>
+</div>
+@endif
+
+@if(session('error'))
+<div id="notification-delete-note-fail" class="card-warning mt-15x p-15x d-flex item-align-center">
+    <img src="{{asset('assets/img/light-bulb.png')}}" class="h-20x" alt="">
+    <p class="ml-15x">{{session('error')}}</p>
+</div>
+@endif
+
 <div class="note-page-content">
     <h3 class="ml-15x mt-15x mb-15x">My Note</h3>
     <div class="note-list-wrapper" id="private-note-list-wrapper">
