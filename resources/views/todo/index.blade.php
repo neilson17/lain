@@ -31,6 +31,31 @@
         <div class="dashboard-list-item d-flex">
             <div class="d-flex item-align-center w-70p">
                 <input id="{{$d->id}}" class="done-todo-list" type="checkbox" @if($d->done == 1) checked @endif >
+                @if ($d->client_id != 1)
+                <img class="img-avatar ml-10x h-40x" src="{{asset('assets/img/'.$d->photo)}}" alt="">
+                @endif
+                <div class="ml-10x">
+                    <p class="dashboard-item-header">{{ $d->name }}</p>
+                    @if ($d->client_id != 1)
+                    <p class="font-12x">{{ $d->client_name }}</p>
+                    @endif
+                </div>
+            </div>
+            <div class="w-30p">
+                <p class="font-12x text-align-right">Due {{ $d->deadline }}</p>
+            </div>
+        </div>
+    </a>
+    <div class="divider"></div>
+    @endforeach
+    @foreach($data2 as $d)
+    <a href="{{ url('/todos/'.$d->id) }}">
+        <div class="dashboard-list-item d-flex">
+            <div class="d-flex item-align-center w-70p">
+                <input id="{{$d->id}}" class="done-todo-list" type="checkbox" @if($d->done == 1) checked @endif >
+                @if ($d->client_id != 1)
+                <img class="img-avatar ml-10x h-40x" src="{{asset('assets/img/'.$d->photo)}}" alt="">
+                @endif
                 <div class="ml-10x">
                     <p class="dashboard-item-header">{{ $d->name }}</p>
                     @if ($d->client_id != 1)

@@ -20,10 +20,20 @@ class TodoController extends Controller
     {
         $data = DB::table('todos as t')
             ->join('clients as c', 't.clients_id', '=', 'c.id')
-            ->select('t.*', 'c.id as client_id', 'c.name as client_name')
+            ->select('t.*', 'c.id as client_id', 'c.name as client_name', 'c.photo_url as photo')
+            ->where('t.deadline', '>=', DB::raw('curdate()'))
+            ->orWhere('t.done', '=', 0)
             ->orderBy('t.deadline')
             ->get();
-        return view('todo.index', compact('data'));
+
+        $data2 = DB::table('todos as t')
+            ->join('clients as c', 't.clients_id', '=', 'c.id')
+            ->select('t.*', 'c.id as client_id', 'c.name as client_name', 'c.photo_url as photo')
+            ->where([['t.done', '=', 1], ['t.deadline', '<', DB::raw('curdate()')]])
+            ->orderBy('t.deadline')
+            ->get();
+        
+        return view('todo.index', compact('data', 'data2'));
     }
 
     /**
@@ -34,7 +44,7 @@ class TodoController extends Controller
     public function create()
     {
         $client = Client::all();
-        $account = Account::all();
+        $account = Account::where('active', '<>', 0)->get();
         $tag = Tag::all();
         return view('todo.add', compact('client', 'account', 'tag'));
     }
@@ -104,6 +114,7 @@ class TodoController extends Controller
         foreach($accountAdded as $acc) array_push($usernameAdded, $acc->username);
         $accountNotAdded = DB::table('accounts as a')
             ->whereNotIn('a.username', $usernameAdded)
+            ->where('a.active', '<>', 0)
             ->get();
 
         $tagAdded = DB::table('tags as t')
@@ -177,13 +188,13 @@ class TodoController extends Controller
     public function searchTodo(Request $request){
         $data = DB::table('todos as t')
             ->join('clients as c', 't.clients_id', '=', 'c.id')
-            ->select('t.*', 'c.id as client_id', 'c.name as client_name')
+            ->select('t.*', 'c.id as client_id', 'c.name as client_name', 'c.photo_url as photo')
             ->where('t.name', 'like', "%".$request->search."%")
             ->get();
 
         $elements = "";
         foreach($data as $t){
-            $elements .= '<a href="/todos/'.$t->id.'"><div class="dashboard-list-item d-flex"><div class="d-flex item-align-center w-70p"><input id="'.$t->id.'" class="done-todo-list" type="checkbox" '.($t->done == 1 ? 'checked' : '').' ><div class="ml-10x"><p class="dashboard-item-header">'.$t->name.'</p>'.($t->client_id != 1 ? '<p class="font-12x">'.$t->client_name .'</p>' : '').'</div></div><div class="w-30p"><p class="font-12x text-align-right">Due '.$t->deadline.'</p></div></div></a><div class="divider"></div>';
+            $elements .= '<a href="/todos/'.$t->id.'"><div class="dashboard-list-item d-flex"><div class="d-flex item-align-center w-70p"><input id="'.$t->id.'" class="done-todo-list" type="checkbox" '.($t->done == 1 ? 'checked' : '').' >'.($t->client_id != 1 ? '<img class="img-avatar ml-10x h-40x" src="'.asset('assets/img/'.$t->photo).'" alt="">' : '').'<div class="ml-10x"><p class="dashboard-item-header">'.$t->name.'</p>'.($t->client_id != 1 ? '<p class="font-12x">'.$t->client_name .'</p>' : '').'</div></div><div class="w-30p"><p class="font-12x text-align-right">Due '.$t->deadline.'</p></div></div></a><div class="divider"></div>';
         }
 
         return response()->json(['success'=>'Successfully searched todos', 'elements'=>$elements]);

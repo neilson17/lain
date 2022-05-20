@@ -38,7 +38,7 @@
             <p class="font-14px d-flex">Assign To</p>
             <select class="ml-10x text-align-center pl-20x pr-20x" name="" id='add-todo-add-assign-list'>
                 @foreach($account as $a)
-                    <option value="{{ $a->username }}">{{ $a->name }}</option>
+                    <option photo="{{asset('assets/img/'.$a->photo_url)}}" value="{{ $a->username }}">{{ $a->name }}</option>
                 @endforeach
             </select>
             <button class="btn pt-5x pb-5x ml-10x" id='btn-add-todo-add-assign'>Add</button>

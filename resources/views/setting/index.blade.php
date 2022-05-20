@@ -83,6 +83,6 @@
 <script src="{{asset('assets/js/main.js')}}"></script>
 @endsection
 
-@section('setting-active')
+@section('settings-active')
 active
 @endsection

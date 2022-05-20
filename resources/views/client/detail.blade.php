@@ -42,18 +42,18 @@
                 <p class="font-14x h-20x"><b>Phone</b></p>
             </div>
             <div class="d-flex flex-dir-col ml-30x">
-                <p class="font-14x h-20x">{{ $data->email }}</p>
+                <a href="mailto:{{$data->email}}" target="_blank" class="font-14x h-20x">{{ $data->email }}</a>
                 <p class="font-14x h-20x">{{ $data->phone_number }}</p>
             </div>
         </div> 
         <div class="d-flex contact-second-row-client-detail">
             <div class="d-flex flex-dir-col">
                 <p class="font-14x h-20x"><b>Instagram</b></p>
-                <p class="font-14x h-20x"><b>LinkedIn</b></p>
+                <p class="font-14x h-20x"><b>Link</b></p>
             </div>
             <div class="d-flex flex-dir-col ml-30x">
-                <p class="font-14x h-20x">{{ $data->instagram }}</p>
-                <p class="font-14x h-20x">{{ $data->linkedin }}</p>
+                <a target="_blank" href="https://www.instagram.com/{{$data->instagram}}" class="font-14x h-20x">{{ $data->instagram }}</a>
+                <a target="_blank" href="https://{{$data->link}}" class="font-14x h-20x">{{ $data->link }}</a>
             </div>
         </div> 
     </div>
@@ -63,18 +63,15 @@
         @foreach($collaborators as $a)
         <div class="position-relative">
             <div class="dashboard-tag-item font-12x item-align-center d-flex">
-                <img src="https://i.pravatar.cc/300" class="img-avatar h-20x mr-10x" alt="">
+                <img src="{{asset('assets/img/'.$a->photo_url)}}" class="img-avatar h-20x mr-10x" alt="">
                 {{ $a->name }}
             </div>
         </div>
         @endforeach
     </div>
 </div>
-<div class="card p-20x mt-15x">
-    <h3>Finance</h3>
-</div>
 <div class="client-item-list-wrapper mt-15x">
-<div class="card p-20x">
+    <div class="card p-20x">
         <div class="d-flex mb-15x card-header-client-detail">
             <h3 class="card-title-client-detail">Upcoming Events</h3>
             <div class="d-flex item-align-center">
@@ -85,7 +82,7 @@
                     <option value="7">7 days</option>
                     <option value="15">15 days</option>
                     <option value="30">30 days</option>
-                    <option value="100">All Upcoming</option>
+                    <option value="100" selected>All Upcoming</option>
                     <option value="200">All</option>
                 </select>
                 <a class="ml-10x font-14x" href="{{url('/events')}}">See More ></a>
@@ -93,7 +90,7 @@
         </div>
         <div class="sidebar-list-wrapper d-flex" id="event-list-client-detail">
             @foreach($events as $e)
-            <a href="{{ url('/events/'.$e->id) }}">
+            <a href="{{ url('events/'.$e->id) }}">
                 <div class="dashboard-list-item d-flex">
                     <div class="d-flex">
                         <div class="ml-10x">
@@ -123,7 +120,7 @@
                     <option value="15">15 days</option>
                     <option value="30">30 days</option>
                     <option value="100">All Upcoming</option>
-                    <option value="200">All Not Done</option>
+                    <option value="200" selected>All Not Done</option>
                     <option value="300">All</option>
                 </select>
                 <a class="ml-10x font-14x" href="{{url('todos')}}">See More ></a>
@@ -156,8 +153,6 @@
 <div class="card p-20x d-flex card-header-client-detail mt-15x">
     <h3 class="card-title-client-detail">Client's Notes</h3>
     <div class="d-flex">
-    <input type="text" class="input-text-merged-button">
-        <a class="btn-merged-input btn" href="">Search</a>
         <a class="btn-normal btn ml-10x create-note-client-detail" href="{{route('notes.create')}}">Create Note</a>
     </div>
 </div>
@@ -206,6 +201,9 @@
             </a>
         @endforeach
     </div>
+</div>
+<div class="card p-20x mt-15x">
+    <h3>Finance</h3>
 </div>
 @endsection
 

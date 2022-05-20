@@ -16,10 +16,9 @@ class NoteController extends Controller
      */
     public function index()
     {
-        $user = session()->get('activeUser');
         $notes = DB::table('notes as n')
             ->join('clients as c', 'n.clients_id', '=', 'c.id')
-            ->where('accounts_username', '=', $user)
+            ->where('accounts_username', '=', "admin")
             ->select('n.*', 'c.name')
             ->orderBy('n.date', 'DESC')
             ->get();
@@ -59,7 +58,6 @@ class NoteController extends Controller
         //     'clients_id' => 'required',
         //     'content' => 'required',
         // ]);
-        $user = session()->get('activeUser');
         date_default_timezone_set('Asia/Jakarta');
         $date = date('Y-m-d H:i:s');
         $data = new Note();
@@ -68,7 +66,7 @@ class NoteController extends Controller
         $data->date = $date;
         $data->type = $request->type;
         $data->clients_id = $request->clients_id;
-        $data->accounts_username = $user;
+        $data->accounts_username = "admin";
 
         // dd($data);
         $data->save();
@@ -153,8 +151,7 @@ class NoteController extends Controller
     }
 
     public function showNote() {
-        $user = session()->get('activeUser');
-        $notes = DB::table('notes')->where('accounts_username', '=', $user)->get();
+        $notes = DB::table('notes')->where('accounts_username', '=', "admin")->get();
 
         $public = $private = [];
 
@@ -179,10 +176,9 @@ class NoteController extends Controller
 
     public function searchNote(Request $request)
     {
-        $user = session()->get('activeUser');
         $notes = DB::table('notes as n')
             ->join('clients as c', 'n.clients_id', '=', 'c.id')
-            ->where('accounts_username', '=', $user)
+            ->where('accounts_username', '=', "admin")
             ->select('n.*', 'c.name')
             ->where('n.title', 'like', "%".$request->search."%")
             ->orderBy('n.date', 'DESC')

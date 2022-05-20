@@ -128,16 +128,14 @@ class AccountController extends Controller
     }
 
     public function showSetting() {
-        $user = session()->get('activeUser');
-        $data = Account::find($user);
+        $data = Account::find("admin");
         return view('setting.index', compact('data'));
     }
 
     public function updateProfile(Request $request) {
         // $comp = strcmp($request->get('password'), $request->get('repeat_password'));
         if (strcmp($request->get('password'), $request->get('repeat_password')) == 0) {
-            $username = session()->get('activeUser');
-            $data = Account::find($username);
+            $data = Account::find("admin");
             
             $data->name = $request->get('name');
             $data->password = $request->get('password');

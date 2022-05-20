@@ -33,7 +33,7 @@
     <div class="d-flex mt-10x flex-wrap mb-10x">
         @foreach($account as $a)
         <div class="dashboard-tag-item font-12x item-align-center d-flex">
-            <img src="https://i.pravatar.cc/300" class="img-avatar h-20x mr-10x" alt="">
+            <img src="{{asset('assets/img/'.$a->photo_url)}}" class="img-avatar h-20x mr-10x" alt="">
             {{ $a->name }}
         </div>
         @endforeach

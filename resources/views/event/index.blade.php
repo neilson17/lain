@@ -31,7 +31,7 @@
         <div class="dashboard-list-item d-flex">
             <div class="d-flex">
                 @if($d->clients_id != 1)
-                    <img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt="">
+                    <img class="img-avatar h-40x" src="{{asset('assets/img/'.$d->photo_url)}}" alt="">
                 @endif
                 <div class="ml-10x">
                     <p class="dashboard-item-header">{{ $d->title }}</p>

@@ -67,7 +67,7 @@ class ClientController extends Controller
         $client->email = $request->get('inpclientemail');
         $client->phone_number = $request->get('inpclientphonenumber');
         $client->instagram = $request->get('inpclientinstagram');
-        $client->linkedin = $request->get('inpclientlinkedin');
+        $client->link = $request->get('inpclientlinkedin');
         $client->status = "in progress";
         $client->deadline = date("Y-m-d H:i:s",strtotime($request->get('inpclientdeadline')));
         $client->job_categories_id = $request->get('job_categories_id');
@@ -98,7 +98,7 @@ class ClientController extends Controller
         $data = $client;
         $date = date("d M Y, H.i", strtotime($client->deadline));
         $todos = Todo::where('clients_id', '=', $client->id)
-            ->whereBetween('deadline', [DB::raw('curdate()'), DB::raw('date_add(curdate(), interval 1 day)')])
+            ->where('done', 0)
             ->orderBy('deadline')
             ->get();
 
@@ -111,9 +111,10 @@ class ClientController extends Controller
             }
         }
         $collaborators = Account::find(array_unique($accounts));
+        // dd($collaborators);
 
         $events = Event::where('clients_id', '=', $data->id)
-            ->whereBetween('date', [DB::raw('curdate()'), DB::raw('date_add(curdate(), interval 1 day)')])
+            ->where('date', '>=', DB::raw('curdate()'))
             ->orderBy('date')
             ->get();
 
@@ -157,7 +158,7 @@ class ClientController extends Controller
         $client->email = $request->get('email');
         $client->phone_number = $request->get('phone_number');
         $client->instagram = $request->get('instagram');
-        $client->linkedin = $request->get('linkedin');
+        $client->link = $request->get('linkedin');
 
         if ($request->hasFile('image')) {
             File::delete($client->photo_url);
@@ -231,7 +232,7 @@ class ClientController extends Controller
             if ($tt != 0) $percentage = round(($td/$tt) * 100, 2);
             else $percentage = 0;
 
-            $elements .= '<a href="/clients/'.$d->id.'"><div class="card p-10x client-list-item mt-15x dashboard-list-item d-flex"><div class="d-flex w-70p item-align-center"><img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt=""><div class="ml-10x mr-10x w-100p"><div class="d-flex item-align-end"><p class="dashboard-item-header">'.$d->name.'</p><p class="font-12x ml-5x">'.$d->job_category->name.'</p></div><progress class="w-80p" id="progressclientdashboard" value="'.($tt != 0 ? $td / $tt * 100 : 0).'" max="100"></progress><label for="progressclientdashboard" class="ml-5x font-14x">'.$percentage.'%</label><p class="font-12x">Task Done: '.$td.'/'.$tt.'</p></div></div><p class="font-12x text-align-right">Due '.$date.'</p> </div></a>';
+            $elements .= '<a href="/clients/'.$d->id.'"><div class="card p-10x client-list-item mt-15x dashboard-list-item d-flex"><div class="d-flex w-70p item-align-center"><img class="img-avatar h-40x" src="'.asset('assets/img/'.$d->photo_url).'" alt=""><div class="ml-10x mr-10x w-100p"><div class="d-flex item-align-end"><p class="dashboard-item-header">'.$d->name.'</p><p class="font-12x ml-5x">'.$d->job_category->name.'</p></div><progress class="w-80p" id="progressclientdashboard" value="'.($tt != 0 ? $td / $tt * 100 : 0).'" max="100"></progress><label for="progressclientdashboard" class="ml-5x font-14x">'.$percentage.'%</label><p class="font-12x">Task Done: '.$td.'/'.$tt.'</p></div></div><p class="font-12x text-align-right">Due '.$date.'</p> </div></a>';
         }
 
         return response()->json(['success'=>'Successfully searched client', 'elements'=>$elements]);

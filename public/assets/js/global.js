@@ -1,3 +1,7 @@
+if(performance.navigation.type == 2){
+    location.reload(true);
+}
+
 $("#hamburger-menu").on('click', function(){
     $("#sidebar").css('display', 'unset');
     $("#close-hamburger").css('display', 'unset');

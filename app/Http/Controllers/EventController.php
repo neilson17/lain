@@ -143,7 +143,7 @@ class EventController extends Controller
         
         $elements = "";
         foreach($data as $e){
-            $elements .= '<a href="/events/'.$e->id.'"><div class="dashboard-list-item d-flex"><div class="d-flex">'.($e->clients_id != 1 ? '<img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt="">' : '').'<div class="ml-10x"><p class="dashboard-item-header">'.$e->title.'</p>'.($e->clients_id != 1 ? '<p class="font-12x">'.$e->client_name.'</p>' : '').'</div></div><p class="font-12x text-align-right">Due '.$e->date.'</p></div></a><div class="divider"></div>';
+            $elements .= '<a href="/events/'.$e->id.'"><div class="dashboard-list-item d-flex"><div class="d-flex">'.($e->clients_id != 1 ? '<img class="img-avatar h-40x" src="'.asset('/assets/img/'.$e->photo_url).'" alt="">' : '').'<div class="ml-10x"><p class="dashboard-item-header">'.$e->title.'</p>'.($e->clients_id != 1 ? '<p class="font-12x">'.$e->client_name.'</p>' : '').'</div></div><p class="font-12x text-align-right">Due '.$e->date.'</p></div></a><div class="divider"></div>';
         }
 
         return response()->json(['success'=>'Successfully searched events', 'elements'=>$elements]);

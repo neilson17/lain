@@ -53,7 +53,7 @@
                                 <p class="font-12x text-align-right"><b>Phone</b></p>
                             </div>
                             <div class="d-flex flex-dir-col ml-10x">
-                                <p class="font-12x">{{ $d->email }}</p>
+                                <p class="font-12x overflow-wrap-anywhere">{{ $d->email }}</p>
                                 <p class="font-12x">{{ $d->phone_number }}</p>
                             </div>
                         </div> 

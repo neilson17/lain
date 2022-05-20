@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('dashboard/index');
 });
 
 Route::get('/login', function() {
@@ -27,23 +27,7 @@ Route::get('/setting', function() {
 
 // Route::get('/dashboard', function() {
 //     return view('dashboard/index');
-// });
-
-// Route::get('/client', function() {
-//     return view('client/index');
-// });
-
-// Route::get('/client/detail', function() {
-//     return view('client/detail');
-// });
-
-// Route::get('/client/create', function() {
-//     return view('client/add');
-// });
-
-// Route::get('/client/edit', function() {
-//     return view('client/edit');
-// });
+// }) ;
 
 Route::get('setting', 'AccountController@showSetting');
 Route::put('settingupdate', 'AccountController@updateProfile');
@@ -53,10 +37,7 @@ Route::resource('teams', 'AccountController');
 Route::resource('todos', 'TodoController');
 Route::resource('events', 'EventController');
 Route::resource('clients', 'ClientController');
-
-Route::group(['middleware' => ['auth']], function() {
-    Route::resource('dashboard', 'DashboardController');
-});
+Route::resource('dashboard', 'DashboardController');
 
 //jgn dihapus yg bawah
 // Route::get('api/login', "AccountController@test");

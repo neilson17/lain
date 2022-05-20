@@ -74,7 +74,7 @@ $("#btn-search-todo").on('click', function(){
 });
 
 // Juga dipake buat todo detail di bagian mark done
-$(".done-todo-list").on('click', function(){
+$(document).on('click', ".done-todo-list", function(){
     var todoid = $(this).attr('id');
     var done = ($(this).is(":checked")) ? 1 : 0;
 
@@ -312,7 +312,7 @@ $("#btn-delete-client-detail").on('click', function(){
     else alert("Delete canceled");
 });
 
-$(".done-todo-client-detail").on('click', function(){
+$(document).on('click', '.done-todo-client-detail', function(){
     var todoid = $(this).attr('id');
     var done = ($(this).is(":checked")) ? 1 : 0;
 

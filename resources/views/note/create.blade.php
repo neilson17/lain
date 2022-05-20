@@ -40,7 +40,7 @@
         </div>
     </div>
     <div class="divider mt-10x mb-10x"></div>
-    <textarea id="" cols="30" rows="10" class="input-text w-100p mw-100p"  placeholder="Note Content" name="inpnotecontent" id="inpnotecontent"></textarea>
+    <textarea cols="30" rows="10" class="input-text w-100p mw-100p"  placeholder="Note Content" name="inpnotecontent" id="inpnotecontent"></textarea>
 </div>
 
 @endsection

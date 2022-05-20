@@ -37,7 +37,7 @@
                 <input type="text" class="input-text mt-3x w-100p" value="{{ $data->instagram }}" name="instagram">
             </div>
             <div class="w-100p mt-15x">
-                <p class="font-14x">LinkedIn</p>
+                <p class="font-14x">Link</p>
                 <input type="text" class="input-text mt-3x w-100p" value="{{ $data->linkedin }}" name="linkedin">
             </div>
             <br>

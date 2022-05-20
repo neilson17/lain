@@ -44,7 +44,7 @@
                 <input type="text" class="input-text mt-3x w-100p" name="inpclientinstagram" id="inpclientinstagram">
             </div>
             <div class="w-100p mt-15x">
-                <p class="font-14x">LinkedIn</p>
+                <p class="font-14x">Link</p>
                 <input type="text" class="input-text mt-3x w-100p" name="inpclientlinkedin" id="inpclientlinkedin">
             </div>
             <br>

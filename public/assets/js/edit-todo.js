@@ -21,13 +21,14 @@ $('#btn-edit-todo-add-assign').on('click', function(e){
     if (assignval != null){
         assignlist.push(assignval);
         var assignname = $('#edit-todo-add-assign-list').find(":selected").text();
+        var assignphoto = $('#edit-todo-add-assign-list').find(":selected").attr('photo');
         $('#edit-todo-assign-list').append(`
             <div class="position-relative">
                 <div class="dashboard-tag-item font-12x item-align-center d-flex">
-                    <img src="https://i.pravatar.cc/300" class="img-avatar h-20x mr-10x" alt="">
+                    <img src="${assignphoto}" class="img-avatar h-20x mr-10x" alt="">
                     ${assignname}
                 </div>
-                <span username="${assignval}" assignname="${assignname}" class="todo-assign-delete color-white text-align-center font-10x">x</span>
+                <span photo="${assignphoto}" username="${assignval}" assignname="${assignname}" class="todo-assign-delete color-white text-align-center font-10x">x</span>
             </div>
         `);
         $("#edit-todo-add-assign-list option[value='" + assignval + "']").remove();
@@ -40,7 +41,8 @@ $('#btn-edit-todo-add-assign').on('click', function(e){
 $(document).on('click', '.todo-assign-delete', function(){
     var assignval = $(this).attr('username');
     var assignname = $(this).attr('assignname');
-    $('#edit-todo-add-assign-list').append("<option value=" + assignval + ">"+ assignname + "</option>");
+    var assignphoto = $(this).attr('photo');
+    $('#edit-todo-add-assign-list').append("<option photo=" + assignphoto + " value=" + assignval + ">"+ assignname + "</option>");
     assignlist.splice( $.inArray(assignval, assignlist), 1 );
     $(this).parent().remove();
 });

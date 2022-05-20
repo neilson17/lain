@@ -30,7 +30,7 @@
                         <h3 class="text-list-sidebar">Team</h3>
                     </div>
                 </a>
-                <a href="" class="@yield('finance-active')">
+                <a href="{{url('/finances')}}" class="@yield('finance-active')">
                     <div class="sidebar-list-item d-flex">
                         <div class="icon-list-sidebar-wrapper">
                             <img src="{{asset('assets/icons/icon-3.png')}}" class="icon-list-sidebar" alt="">
@@ -46,7 +46,7 @@
                         <h3 class="text-list-sidebar">Client</h3>
                     </div>
                 </a>
-                <a href="/todos" class="@yield('todo-active')">
+                <a href="{{url('/todos')}}" class="@yield('todo-active')">
                     <div class="sidebar-list-item d-flex">
                         <div class="icon-list-sidebar-wrapper">
                             <img src="{{asset('assets/icons/icon-9.png')}}" class="icon-list-sidebar" alt="">
@@ -54,7 +54,7 @@
                         <h3 class="text-list-sidebar">Todo</h3>
                     </div>
                 </a>
-                <a href="/events" class="@yield('event-active')">
+                <a href="{{url('/events')}}" class="@yield('event-active')">
                     <div class="sidebar-list-item d-flex">
                         <div class="icon-list-sidebar-wrapper">
                             <img src="{{asset('assets/icons/icon-8.png')}}" class="icon-list-sidebar" alt="">
@@ -62,7 +62,7 @@
                         <h3 class="text-list-sidebar">Event</h3>
                     </div>
                 </a>
-                <a href="/notes" class="@yield('note-active')">
+                <a href="{{url('/notes')}}" class="@yield('note-active')">
                     <div class="sidebar-list-item d-flex">
                         <div class="icon-list-sidebar-wrapper">
                             <img src="{{asset('assets/icons/icon-5.png')}}" class="icon-list-sidebar" alt="">
@@ -72,7 +72,7 @@
                 </a>
             </div>
             <div class="sidebar-list-wrapper d-flex">
-                <a href="/setting" class="@yield('settings-active')">
+                <a href="{{url('/setting')}}" class="@yield('settings-active')">
                     <div class="sidebar-list-item d-flex">
                         <div class="icon-list-sidebar-wrapper">
                             <img src="{{asset('assets/icons/icon-6.png')}}" class="icon-list-sidebar" alt="">
@@ -80,7 +80,7 @@
                         <h3 class="text-list-sidebar">Settings</h3>
                     </div>
                 </a>
-                <a href="/api/logout">
+                <a href="{{url('/api/logout')}}">
                     <div class="sidebar-list-item d-flex">
                         <div class="icon-list-sidebar-wrapper">
                             <img src="{{asset('assets/icons/icon-7.png')}}" class="icon-list-sidebar" alt="">
@@ -110,6 +110,6 @@
     </div>
     <img src="{{asset('assets/icons/icon-11.png')}}" id="close-hamburger" class="h-40x" alt="">
     @yield('javascript')
-    <script src="{{asset('assets/js/hamburger.js')}}"></script>
+    <script src="{{asset('assets/js/global.js')}}"></script>
 </body>
 </html>

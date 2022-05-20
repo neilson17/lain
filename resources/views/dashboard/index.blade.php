@@ -12,50 +12,23 @@
             <a class="font-14x" href="{{url('/clients')}}">See More ></a>
         </div>
         <div class="sidebar-list-wrapper d-flex">
-            <a href="">
+            @foreach($clients as $c)
+            <a href="{{ url('/clients/'.$c['data']->id) }}">
                 <div class="dashboard-list-item d-flex">
                     <div class="d-flex w-70p item-align-center">
-                        <img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt="">
+                        <img class="img-avatar h-40x" src="{{asset('assets/img/'.$c['data']->photo_url)}}" alt="">
                         <div class="ml-10x mr-10x w-100p">
-                            <p class="dashboard-item-header">Client Deadline</p>
-                            <progress class="w-80p" id="progressclientdashboard" value="32" max="100"></progress>
-                            <label for="progressclientdashboard" class="font-14x">10%</label>
-                            <p class="font-12x">Task Done: 14/20</p>
+                            <p class="dashboard-item-header">{{$c['data']->name}}</p>
+                            <progress class="w-80p" id="progressclientdashboard" value="{{ $c['percentage'] * 100 }}" max="100"></progress>
+                            <label for="progressclientdashboard" class="font-14x">{{ $c["percentage"] * 100 }}%</label>
+                            <p class="font-12x">Task Done: {{ $c["taskDone"] }}/{{ $c["totalTask"] }}</p>
                         </div>
                     </div>
-                    <p class="font-12x text-align-right">Due 15 Apr 2022, 15.00</p>
+                    <p class="font-12x text-align-right">Due {{$c['data']->deadline}}</p>
                 </div>
             </a>
             <div class="divider"></div>
-            <a href="">
-                <div class="dashboard-list-item d-flex">
-                    <div class="d-flex w-70p item-align-center">
-                        <img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt="">
-                        <div class="ml-10x mr-10x w-100p">
-                            <p class="dashboard-item-header">Client Deadline</p>
-                            <progress class="w-80p" id="progressclientdashboard" value="32" max="100"></progress>
-                            <label for="progressclientdashboard" class="font-14x">10%</label>
-                            <p class="font-12x">Task Done: 14/20</p>
-                        </div>
-                    </div>
-                    <p class="font-12x text-align-right">Due 15 Apr 2022, 15.00</p>
-                </div>
-            </a>
-            <div class="divider"></div>
-            <a href="">
-                <div class="dashboard-list-item d-flex">
-                    <div class="d-flex w-70p item-align-center">
-                        <img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt="">
-                        <div class="ml-10x mr-10x w-100p">
-                            <p class="dashboard-item-header">Client Deadline</p>
-                            <progress class="w-80p" id="progressclientdashboard" value="32" max="100"></progress>
-                            <label for="progressclientdashboard" class="font-14x">10%</label>
-                            <p class="font-12x">Task Done: 14/20</p>
-                        </div>
-                    </div>
-                    <p class="font-12x text-align-right">Due 15 Apr 2022, 15.00</p>
-                </div>
-            </a>
+            @endforeach
         </div>
     </div>
     <div class="card p-20x">
@@ -63,55 +36,38 @@
             <h3>Upcoming Events</h3>
             <div class="d-flex item-align-center">
                 <p class="mr-10x font-14x">Range: </p>
-                <select name="" class="pr-20x pl-20x" id="">
-                    <option value="1">1 days</option>
+                <select class="pr-20x pl-20x" id="range-event-dashboard">
+                    <option value="1">1 day</option>
                     <option value="3">3 days</option>
                     <option value="7">7 days</option>
                     <option value="15">15 days</option>
                     <option value="30">30 days</option>
+                    <option value="100" selected>All Upcoming</option>
+                    <option value="200">All</option>
                 </select>
                 <a class="ml-10x font-14x" href="{{url('/events')}}">See More ></a>
             </div>
         </div>
         <div class="sidebar-list-wrapper d-flex">
-            <a href="">
+            @foreach($events as $d)
+            <a href="{{ url('/events/'.$d->id) }}">
                 <div class="dashboard-list-item d-flex">
                     <div class="d-flex">
-                        <!-- kalo client idnya 1 tag img dibawah gausa dimasukkan -->
-                        <img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt="">
+                        @if($d->clients_id != 1)
+                            <img class="img-avatar h-40x" src="{{asset('assets/img/'.$d->client->photo_url)}}" alt="">
+                        @endif
                         <div class="ml-10x">
-                            <p class="dashboard-item-header">Client Deadline</p>
-                            <p class="font-12x">Client Name</p>
+                            <p class="dashboard-item-header">{{ $d->title }}</p>
+                            @if($d->clients_id != 1)
+                            <p class="font-12x">{{ $d->client->name }}</p>
+                            @endif
                         </div>
                     </div>
-                    <p class="font-12x text-align-right">Due 15 Apr 2022, 15.00</p>
+                    <p class="font-12x text-align-right">Due {{ $d->date }}</p>
                 </div>
             </a>
             <div class="divider"></div>
-            <a href="">
-                <div class="dashboard-list-item d-flex">
-                    <div class="d-flex">
-                        <div class="ml-10x">
-                            <p class="dashboard-item-header">Client Deadline</p>
-                            <p class="font-12x">Client Name</p>
-                        </div>
-                    </div>
-                    <p class="font-12x text-align-right">Due 15 Apr 2022, 15.00</p>
-                </div>
-            </a>
-            <div class="divider"></div>
-            <a href="">
-                <div class="dashboard-list-item d-flex">
-                    <div class="d-flex">
-                        <img class="img-avatar h-40x" src="https://i.pravatar.cc/300" alt="">
-                        <div class="ml-10x">
-                            <p class="dashboard-item-header">Client Deadline</p>
-                            <p class="font-12x">Client Name</p>
-                        </div>
-                    </div>
-                    <p class="font-12x text-align-right">Due 15 Apr 2022, 15.00</p>
-                </div>
-            </a>
+            @endforeach
         </div>
         <p class="text-align-right pb-10x pt-10x">
             <br>
@@ -123,60 +79,41 @@
             <h3>To Dos</h3>
             <div class="d-flex item-align-center">
                 <p class="mr-10x font-14x">Range: </p>
-                <select name="" class="pr-20x pl-20x" id="">
-                    <option value="1">1 days</option>
+                <select class="pr-20x pl-20x" id="range-todo-dashboard">
+                    <option value="1">1 day</option>
                     <option value="3">3 days</option>
                     <option value="7">7 days</option>
                     <option value="15">15 days</option>
                     <option value="30">30 days</option>
+                    <option value="100">All Upcoming</option>
+                    <option value="200" selected>All Not Done</option>
+                    <option value="300">All</option>
                 </select>
                 <a class="ml-10x font-14x" href="{{url('todos')}}">See More ></a>
             </div>
         </div>
-        <a href="{{url('/todos/detail')}}">
+        @foreach($todos as $d)
+        <a href="{{ url('/todos/'.$d->id) }}">
             <div class="dashboard-list-item d-flex">
                 <div class="d-flex item-align-center w-70p">
-                    <input type="checkbox">
+                    <input id="{{$d->id}}" class="done-todo-list" type="checkbox" @if($d->done == 1) checked @endif >
+                    @if ($d->clients_id != 1)
+                    <img class="img-avatar ml-10x h-40x" src="{{asset('assets/img/'.$d->client->photo_url)}}" alt="">
+                    @endif
                     <div class="ml-10x">
-                        <p class="dashboard-item-header">Todo Today</p>
-                        <p class="font-12x">Client Name</p>
-                    </div> 
+                        <p class="dashboard-item-header">{{ $d->name }}</p>
+                        @if ($d->clients_id != 1)
+                        <p class="font-12x">{{ $d->client_name }}</p>
+                        @endif
+                    </div>
                 </div>
                 <div class="w-30p">
-                    <p class="font-12x text-align-right">Due 15 Apr 2022, 15.00</p>
+                    <p class="font-12x text-align-right">Due {{ $d->deadline }}</p>
                 </div>
             </div>
         </a>
         <div class="divider"></div>
-        <a href="{{url('/todos/detail')}}">
-            <div class="dashboard-list-item d-flex">
-                <div class="d-flex item-align-center w-70p">
-                    <input type="checkbox">
-                    <div class="ml-10x">
-                        <p class="dashboard-item-header">Todo Today</p>
-                        <p class="font-12x">Client Name</p>
-                    </div> 
-                </div>
-                <div class="w-30p">
-                    <p class="font-12x text-align-right">Due 15 Apr 2022, 15.00</p>
-                </div>
-            </div>
-        </a>
-        <div class="divider"></div>
-        <a href="{{url('/todos/detail')}}">
-            <div class="dashboard-list-item d-flex">
-                <div class="d-flex item-align-center w-70p">
-                    <input type="checkbox">
-                    <div class="ml-10x">
-                        <p class="dashboard-item-header">Todo Today</p>
-                        <p class="font-12x">Client Name</p>
-                    </div> 
-                </div>
-                <div class="w-30p">
-                    <p class="font-12x text-align-right">Due 15 Apr 2022, 15.00</p>
-                </div>
-            </div>
-        </a>
+        @endforeach
         <p class="text-align-right pb-10x pt-10x">
             <br>
             <a class="btn-normal btn" href="{{url('/todos/create')}}">Add Todo</a>
