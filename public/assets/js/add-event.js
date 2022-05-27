@@ -16,7 +16,7 @@ $("#btn-new-event").on('click', function(e){
     var clients_id = $('#inpclientid option:selected').val();
     var description = $('#inpdescription').val();
 
-    // Add new todo to db
+    // Add new event to db
     var token_name = $('input[name="_token"]').val();
     $.ajax({
         url: "/api/createevent",

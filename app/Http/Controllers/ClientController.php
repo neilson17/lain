@@ -10,6 +10,7 @@ use App\Todo;
 use App\Account;
 use App\Event;
 use App\Note;
+use App\Transaction;
 use Illuminate\Support\Facades\File; 
 
 class ClientController extends Controller
@@ -21,10 +22,6 @@ class ClientController extends Controller
      */
     public function index()
     {
-        // $data = Client::find(2);
-        // $todo = Todo::where([['clients_id', '=', $data->id], ['done', '=', '0']])->count();
-        // dd($todo);
- 
         $client = Client::where('id', '<>', 1)->orderBy('deadline')->get();
         $data = [];
         foreach($client as $d) {
@@ -81,7 +78,6 @@ class ClientController extends Controller
         $client->save();
 
         return redirect()->route('clients.index')->with('status', 'Successfully added new client!');
-        // return response()->json(['success'=>'Successfully added new client']);
     }
 
     /**
@@ -127,7 +123,11 @@ class ClientController extends Controller
             else array_push($private, $n);
         }
 
-        return view('client.detail', compact('data', 'date', 'tt', 'td', 'percentage', 'collaborators', 'events', 'todos', 'public', 'private'));
+        $trans = Transaction::where('clients_id', '=', $client->id)
+            ->orderBy('date')
+            ->get();
+
+        return view('client.detail', compact('data', 'trans', 'date', 'tt', 'td', 'percentage', 'collaborators', 'events', 'todos', 'public', 'private'));
     }
 
     /**
@@ -302,6 +302,27 @@ class ClientController extends Controller
         }
 
         return response()->json(['success'=>'Successfully updated range on todos', 'elements'=>$elements]);
+    }
+
+    public function rangeTransaction(Request $request){
+        $client = Client::find($request->client_id);
+        $range = $request->range;
+
+        if ($range == 100){
+            $trans = Transaction::where('clients_id', '=', $client->id)
+                ->orderBy('date')
+                ->get();
+        }
+        else {
+            $trans = Transaction::where('clients_id', '=', $client->id)
+                ->whereBetween('date', [DB::raw('date_sub(curdate(), interval '.$request->range.' day)'), DB::raw('curdate()')])
+                ->orderBy('date')
+                ->get();
+        }
+
+        $elements =  view("transaction.reportContent", compact("trans"))->render();
+
+        return response()->json(['success'=>'Successfully updated range on transaction', 'elements'=>$elements]);
     }
 
     public function showClient() {

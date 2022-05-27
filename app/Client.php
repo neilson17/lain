@@ -21,6 +21,10 @@ class Client extends Model
     }
 
     public function events() {
-        return $this -> hasMany('App\Todo', 'clients_id', 'id');
+        return $this -> hasMany('App\Event', 'clients_id', 'id');
+    }
+
+    public function transactions() {
+        return $this -> hasMany('App\Transaction', 'clients_id', 'id');
     }
 }

@@ -392,3 +392,256 @@ $("#range-todo-client-detail").on('change', function(){
         },
     });
 });
+
+$("#range-transaction-client-detail").on('change', function(){
+    var range = $(this).val();
+    var clientid = $(this).attr('client');
+
+    var token_name = $('input[name="_token"]').val();
+    $.ajax({
+        url: "/api/rangetransaction",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            range: range,
+            client_id:clientid,
+        },
+        success:function(response){
+            console.log(response.success);
+            $("#transaction-list-client-detail").html(response.elements);
+        },
+        error: function(response) {
+            console.log("Error while updating range on transactions");
+        },
+    });
+});
+
+// ========================================================================
+// Finance List 
+// ========================================================================
+$(document).on('click', ".done-piutang-list", function(){
+    if (confirm("Are you sure to finish this piutang?")){
+        var transid = $(this).attr('id');
+        var token_name = $('input[name="_token"]').val();
+        $.ajax({
+            url: "/api/donepiutang",
+            type:"POST",
+            data:{
+                "_token": token_name,
+                id:transid,
+            },
+            success:function(response){
+                console.log(response.success);
+                $("#" + transid +".done-piutang-list").remove();
+                $("#transcat" + transid).html("Income");
+                $("#transcat" + transid).removeClass("card-neutral");
+                $("#transcat" + transid).addClass("card-progress");
+            },
+            error: function(response) {
+                console.log("Error while updating transaction");
+            },
+        });
+    }
+    else {
+        $(this).prop('checked', false);
+    }
+});
+
+$(document).on('click', ".done-hutang-list", function(){
+    if (confirm("Are you sure to finish this hutang?")){
+        var transid = $(this).attr('id');
+        var token_name = $('input[name="_token"]').val();
+        $.ajax({
+            url: "/api/donehutang",
+            type:"POST",
+            data:{
+                "_token": token_name,
+                id:transid,
+            },
+            success:function(response){
+                if (response.success == "success"){
+                    console.log("Successfully updated transaction");
+                    $("#" + transid + ".done-hutang-list").remove();
+                    $("#transcat" + transid).html("Expense");
+                    $("#transcat" + transid).removeClass("card-neutral");
+                    $("#transcat" + transid).addClass("card-warning");
+                }
+                else {
+                    console.log("Insufficient balance");
+                    alert("Insufficient balance");
+                    $("#" + transid + ".done-hutang-list").prop('checked', false);
+                }
+            },
+            error: function(response) {
+                console.log("Error while updating transaction");
+            },
+        });
+    }
+    else {
+        $(this).prop('checked', false);
+    }
+});
+
+// ========================================================================
+// Transaction Detail
+// ========================================================================
+$("#btn-delete-transaction-detail").on('click', function(){
+    let confirmAction = "Are you sure to delete this transaction?";
+    if (confirm(confirmAction)){
+        $("#delete-transaction-detail").submit();
+    }
+    else alert("Delete canceled");
+});
+
+$(".done-piutang-detail").on('click', function(){
+    if (confirm("Are you sure to finish this piutang?")){
+        var transid = $(this).attr('id');
+        var token_name = $('input[name="_token"]').val();
+        $.ajax({
+            url: "/api/donepiutang",
+            type:"POST",
+            data:{
+                "_token": token_name,
+                id:transid,
+            },
+            success:function(response){
+                console.log(response.success);
+                $("#mark-done-transaction-detail").remove();
+                $("#transcatdetail").html("Income");
+            },
+            error: function(response) {
+                console.log("Error while updating transaction");
+            },
+        });
+    }
+    else {
+        $(this).prop('checked', false);
+    }
+});
+
+$(".done-hutang-detail").on('click', function(){
+    if (confirm("Are you sure to finish this hutang?")){
+        var transid = $(this).attr('id');
+        var token_name = $('input[name="_token"]').val();
+        $.ajax({
+            url: "/api/donehutang",
+            type:"POST",
+            data:{
+                "_token": token_name,
+                id:transid,
+            },
+            success:function(response){
+                if (response.success == "success"){
+                    console.log("Successfully updated transaction");
+                    $("#mark-done-transaction-detail").remove();
+                    $("#transcatdetail").html("Expense");
+                }
+                else {
+                    console.log("Insufficient balance");
+                    alert("Insufficient balance");
+                    $("#" + transid + ".done-hutang-detail").prop('checked', false);
+                }
+            },
+            error: function(response) {
+                console.log("Error while updating transaction");
+            },
+        });
+    }
+    else {
+        $(this).prop('checked', false);
+    }
+});
+
+// ========================================================================
+// Transaction Edit
+// ========================================================================
+$("#btn-edit-transaction").on('click', function(e){
+    var title = $('input[name="inptransactiontitle"]').val();
+    var amount = $('input[name="inptransactionamount"]').val();
+    var date = $('input[name="inptransactiondate"]').val();
+    var clients_id = $('#inptransactionclientid option:selected').val();
+    var transid = $('#transid').val();
+    var description = $('#inptransactiondescription').val();
+    var bankAccount = $('#bank_account_id').attr('bank');
+    var category_id = $('#category_id').attr('category');
+
+    // Add new event to db
+    var token_name = $('input[name="_token"]').val();
+    $.ajax({
+        url: "/api/edittransaction",
+        type:"POST",
+        data:{
+            "_token": token_name,
+            id: transid,
+            title: title,
+            amount: amount,
+            date: date,
+            clients_id: clients_id,
+            description: description,
+            bankAcc: bankAccount,
+            category: category_id
+        },
+        success:function(response){
+            if (response.success == "success"){
+                e.preventDefault();
+                console.log("Successfully edited transaction");
+                $("#notification-edit-transaction-success").removeClass("d-none");
+            }
+            else{
+                e.preventDefault();
+                console.log(response.success);
+                $("#notification-edit-transaction-fail").removeClass("d-none");
+                $("#edit-transaction-fail-message").html("Insufficient available balance");
+            }
+        },
+        error: function(response) {
+            e.preventDefault();
+            $("#notification-edit-transaction-fail").removeClass("d-none");
+            console.log("Error while adding transaction");
+        },
+    });
+});
+
+// ========================================================================
+// Target Detail
+// ========================================================================
+$("#btn-delete-target-detail").on('click', function(){
+    let confirmAction = "Are you sure to delete this target?";
+    if (confirm(confirmAction)){
+        $("#delete-target-detail").submit();
+    }
+    else alert("Delete canceled");
+});
+
+$(".done-target").on('click', function(){
+    if (confirm("Are you sure to finish this target and add this to expense?")){
+        var targetid = $(this).attr('id');
+        var token_name = $('input[name="_token"]').val();
+        $.ajax({
+            url: "/api/donetarget",
+            type:"POST",
+            data:{
+                "_token": token_name,
+                id:targetid,
+            },
+            success:function(response){
+                if (response.success == "success"){
+                    console.log("Successfully updated target");
+                    $("#mark-done-target-detail").remove();
+                    $("#targetdonecard").html('<div class="dashboard-tag-item font-12x btn-progress">Done</div>');
+                }
+                else {
+                    console.log("Insufficient balance");
+                    alert("Target amount is not yet fulfilled");
+                    $(".done-target").prop('checked', false);
+                }
+            },
+            error: function(response) {
+                console.log("Error while updating target");
+            },
+        });
+    }
+    else {
+        $(".done-target").prop('checked', false);
+    }
+});

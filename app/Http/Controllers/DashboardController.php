@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Account;
 use App\Todo;
 use App\Event;
+use App\Transaction;
 use App\Client;
 use DB;
 
@@ -32,13 +33,23 @@ class DashboardController extends Controller
 
         $todos = Todo::where('done', 0)
             ->orderBy('deadline')
+            ->limit(5)
             ->get();
 
-        $events = Event::where('date', '>=', DB::raw('curdate()'))
-            ->orderBy('date')
-            ->get();
+        $events = null;
+        $events1 = Event::where('date', '>=', DB::raw('curdate()'))->orderBy('date')->limit(5)->get();
+        if ($events1->count() < 5){
+            $rest = 5 - $events1->count();
+            $events2 = Event::where('date', '<', DB::raw('curdate()'))->orderBy('date')->limit($rest)->get();
+            $events = $events1->merge($events2);
+        }
+        else{
+            $events = $events1;
+        }
 
-        return view('dashboard.index', compact('clients', 'todos', 'events'));
+        $trans = Transaction::orderBy('date', 'desc')->limit(5)->get();
+
+        return view('dashboard.index', compact('clients', 'todos', 'events', 'trans'));
     }
 
     /**

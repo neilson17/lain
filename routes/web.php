@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard/index');
-});
+Route::get('/', 'DashboardController@index');
 
 Route::get('/login', function() {
     return view('login/index');
@@ -25,10 +23,6 @@ Route::get('/setting', function() {
     return view('setting/index');
 });
 
-// Route::get('/dashboard', function() {
-//     return view('dashboard/index');
-// }) ;
-
 Route::get('setting', 'AccountController@showSetting');
 Route::put('settingupdate', 'AccountController@updateProfile');
 
@@ -37,6 +31,10 @@ Route::resource('teams', 'AccountController');
 Route::resource('todos', 'TodoController');
 Route::resource('events', 'EventController');
 Route::resource('clients', 'ClientController');
+Route::resource('finances', 'FinanceController');
+Route::resource('targets', 'TargetController');
+Route::resource('transactions', 'TransactionController');
+Route::resource('targets', 'TargetController');
 Route::resource('dashboard', 'DashboardController');
 
 //jgn dihapus yg bawah
@@ -54,15 +52,23 @@ Route::get('api/showtodo', 'TodoController@showTodo');
 Route::get('api/showclient', 'ClientController@showClient');
 Route::post('api/createtodotag', 'TagController@store');
 Route::post('api/createtodo', 'TodoController@store');
+Route::post('api/createtransaction', 'TransactionController@store');
+Route::post('api/createtarget', 'TargetController@store');
 Route::post('api/edittodo', 'TodoController@update');
 Route::post('api/createevent', 'EventController@store');
 Route::post('api/editevent', 'EventController@update');
+Route::post('api/edittransaction', 'TransactionController@update');
+Route::post('api/edittarget', 'TargetController@update');
 Route::post('api/addclient', 'ClientController@store');
 Route::post('api/createnote', 'NoteController@store');
 Route::post('api/editnote', 'NoteController@update');
 Route::post('api/donetodo', 'TodoController@changeDone');
+Route::post('api/donepiutang', 'TransactionController@changeDonePiutang');
+Route::post('api/donehutang', 'TransactionController@changeDoneHutang');
+Route::post('api/donetarget', 'TargetController@changeDone');
 Route::post('api/rangeevent', 'ClientController@rangeEvent');
 Route::post('api/rangetodo', 'ClientController@rangeTodo');
+Route::post('api/rangetransaction', 'ClientController@rangeTransaction');
 
 // Search
 Route::post('api/searchtodos', 'TodoController@searchTodo');
@@ -70,3 +76,6 @@ Route::post('api/searchnotes', 'NoteController@searchNote');
 Route::post('api/searchevents', 'EventController@searchEvent');
 Route::post('api/searchteams', 'AccountController@searchTeam');
 Route::post('api/searchclients', 'ClientController@searchClient');
+
+Route::get('reports', 'TransactionController@financeReport');
+Route::post('transactions/getReportsContent', 'TransactionController@getReportsContent');
