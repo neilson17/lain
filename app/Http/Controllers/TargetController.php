@@ -37,6 +37,7 @@ class TargetController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('admin-only');
         $request->validate([
             'title' => 'required',
             'date' => 'required',
@@ -63,6 +64,7 @@ class TargetController extends Controller
      */
     public function show(Target $target)
     {
+        $this->authorize('admin-only');
         $data = $target;
         return view('target.detail', compact("data"));
     }
@@ -75,6 +77,7 @@ class TargetController extends Controller
      */
     public function edit(Target $target)
     {
+        $this->authorize('admin-only');
         $data = $target;
         $bankAcc = BankAccount::find(1);
         $avalBal = $target->current_amount + $bankAcc->available;
@@ -90,6 +93,7 @@ class TargetController extends Controller
      */
     public function update(Request $request, Target $target)
     {
+        $this->authorize('admin-only');
         $target = Target::find($request->id);
         $bankAcc = BankAccount::find(1);
         $newAval = $bankAcc->available + $target->current_amount - $request->current_amount;
@@ -114,6 +118,7 @@ class TargetController extends Controller
      */
     public function destroy(Target $target)
     {
+        $this->authorize('admin-only');
         try{
             $target->delete();
             return redirect()->route('finances.index')->with('statustarget',
@@ -127,6 +132,7 @@ class TargetController extends Controller
     }
 
     public function changeDone(Request $request){
+        $this->authorize('admin-only');
         $target = Target::find($request->id);
         
         if ($target->current_amount == $target->target_amount){

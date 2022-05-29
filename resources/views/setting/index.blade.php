@@ -26,8 +26,8 @@
         <div class="d-flex flex-dir-col form-edit-team-wrapper">
             <div class="w-100p">
                 <p class="font-14x">Username</p>
-                <input type="text" class="input-text mt-3x w-100p" disabled value="{{ $data->username }}">
-                <input type="hidden" value="{{ $data->username }}" name="username">
+                <input type="text" class="input-text mt-3x w-100p" disabled value="{{ $data->email }}">
+                <input type="hidden" value="{{ $data->id }}" name="id_user">
             </div>
             <div class="w-100p mt-15x">
                 <p class="font-14x">Name</p>
@@ -37,18 +37,19 @@
                 <div class="d-flex justify-content-space-between">
                     <div class="w-50p mr-10x">
                         <p class="font-14x">Password</p>
-                        <input type="password" class="input-text mt-3x w-100p" value="{{ $data->password }}" name="password">
+                        <input type="password" class="input-text mt-3x w-100p" value="" name="password">
                     </div>
                     <div class="w-50p ml-10x">
                         <p class="font-14x">Repeat Password</p>
-                        <input type="password" class="input-text mt-3x w-100p" value="{{ $data->password }}" name="repeat_password">
+                        <input type="password" class="input-text mt-3x w-100p" value="" name="repeat_password">
                     </div>
                 </div>
             </div>
+            <p class="font-12x mt-3x">*Empty these fields if not changing password</p>
             <div class="divider mt-15x"></div>
             <div class="w-100p mt-15x">
                 <p class="font-14x">Email</p>
-                <input type="text" class="input-text mt-3x w-100p" value="{{ $data->email }}" name="email">
+                <input type="text" class="input-text mt-3x w-100p" value="{{ $data->email_email }}" name="email">
             </div>
             <div class="w-100p mt-15x">
                 <p class="font-14x">Phone Number</p>

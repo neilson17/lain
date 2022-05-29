@@ -389,6 +389,10 @@ option {
 	cursor: pointer;
 }
 
+.invalid-feedback {
+	color: white !important;
+}
+
 .todo-assign-delete{
 	background: rgb(240, 49, 49); 
 	position:absolute; 

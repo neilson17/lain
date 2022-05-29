@@ -19,4 +19,8 @@ class Todo extends Model
     public function client() {
         return $this -> belongsTo('App\Client', 'clients_id');
     }
+    
+    public function users() {
+        return $this->belongsToMany('App\User', 'account_todo', 'todo_id', 'user_id');
+    }
 }

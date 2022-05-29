@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Client;
 use App\Tag;
 use App\Account;
+use App\User;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 class TodoController extends Controller
 {
@@ -18,20 +20,41 @@ class TodoController extends Controller
      */
     public function index()
     {
-        $data = DB::table('todos as t')
-            ->join('clients as c', 't.clients_id', '=', 'c.id')
-            ->select('t.*', 'c.id as client_id', 'c.name as client_name', 'c.photo_url as photo')
-            ->where('t.deadline', '>=', DB::raw('curdate()'))
-            ->orWhere('t.done', '=', 0)
-            ->orderBy('t.deadline')
-            ->get();
+        if (Auth::user()->role == "Admin") {
+            $data = DB::table('todos as t')
+                ->join('clients as c', 't.clients_id', '=', 'c.id')
+                ->select('t.*', 'c.id as client_id', 'c.name as client_name', 'c.photo_url as photo')
+                ->where('t.deadline', '>=', DB::raw('curdate()'))
+                ->orWhere('t.done', '=', 0)
+                ->orderBy('t.deadline')
+                ->get();
 
-        $data2 = DB::table('todos as t')
-            ->join('clients as c', 't.clients_id', '=', 'c.id')
-            ->select('t.*', 'c.id as client_id', 'c.name as client_name', 'c.photo_url as photo')
-            ->where([['t.done', '=', 1], ['t.deadline', '<', DB::raw('curdate()')]])
-            ->orderBy('t.deadline')
-            ->get();
+            $data2 = DB::table('todos as t')
+                ->join('clients as c', 't.clients_id', '=', 'c.id')
+                ->select('t.*', 'c.id as client_id', 'c.name as client_name', 'c.photo_url as photo')
+                ->where([['t.done', '=', 1], ['t.deadline', '<', DB::raw('curdate()')]])
+                ->orderBy('t.deadline')
+                ->get();
+        }
+        else {
+            $data = DB::table('todos as t')
+                ->join('account_todo as at', 'at.todo_id', '=', 't.id')
+                ->where('at.user_id', '=', Auth::user()->id)
+                ->join('clients as c', 't.clients_id', '=', 'c.id')
+                ->select('t.*', 'c.id as client_id', 'c.name as client_name', 'c.photo_url as photo')
+                ->whereRaw('(t.deadline >= curdate() or t.done = 0)')
+                ->orderBy('t.deadline')
+                ->distinct()
+                ->get();
+
+            $data2 = DB::table('todos as t')
+                ->join('clients as c', 't.clients_id', '=', 'c.id')
+                ->select('t.*', 'c.id as client_id', 'c.name as client_name', 'c.photo_url as photo')
+                ->join('account_todo as at', 'at.todo_id', '=', 't.id')
+                ->where([['t.done', '=', 1], ['t.deadline', '<', DB::raw('curdate()')], ['at.user_id', '=', Auth::user()->id]])
+                ->orderBy('t.deadline')
+                ->get();
+        }
         
         return view('todo.index', compact('data', 'data2'));
     }
@@ -44,7 +67,7 @@ class TodoController extends Controller
     public function create()
     {
         $client = Client::all();
-        $account = Account::where('active', '<>', 0)->get();
+        $account = User::where('active', '<>', 0)->get();
         $tag = Tag::all();
         return view('todo.add', compact('client', 'account', 'tag'));
     }
@@ -73,7 +96,7 @@ class TodoController extends Controller
         // $taglist = Tag::find($request->tag);
         $todo->tags()->attach($request->tag);
         // $usernamelist = Account::find($request->assign);
-        $todo->accounts()->attach($request->assign);
+        $todo->users()->attach($request->assign);
         
         return response()->json(['success'=>'Successfully added new todo']);
     }
@@ -89,7 +112,7 @@ class TodoController extends Controller
         $data = $todo;
         $client = $data->client;
         $tag = $data->tags;
-        $account = $data->accounts;
+        $account = $data->users;
         $date = date("d M Y, H.i", strtotime($data->deadline));
         return view('todo.detail', compact('data', 'date', 'client', 'tag', 'account'));
         // dd($tag);
@@ -106,15 +129,15 @@ class TodoController extends Controller
         $data = $todo;
         $client = Client::all();
 
-        $accountAdded = DB::table('accounts as a')
-            ->join('account_todo as at', 'a.username', '=', 'at.account_username')
+        $accountAdded = DB::table('users as u')
+            ->join('account_todo as at', 'u.id', '=', 'at.user_id')
             ->where('at.todo_id', '=', $todo->id)
             ->get();
         $usernameAdded = [];
-        foreach($accountAdded as $acc) array_push($usernameAdded, $acc->username);
-        $accountNotAdded = DB::table('accounts as a')
-            ->whereNotIn('a.username', $usernameAdded)
-            ->where('a.active', '<>', 0)
+        foreach($accountAdded as $acc) array_push($usernameAdded, $acc->email);
+        $accountNotAdded = DB::table('users as u')
+            ->whereNotIn('u.email', $usernameAdded)
+            ->where('u.active', '<>', 0)
             ->get();
 
         $tagAdded = DB::table('tags as t')
@@ -153,7 +176,7 @@ class TodoController extends Controller
         $todo->clients_id = $request->get('clients_id');
         $todo->save();
         $todo->tags()->sync($request->tag);
-        $todo->accounts()->sync($request->assign);
+        $todo->users()->sync($request->assign);
         
         return response()->json(['success'=>"Successfully edited todo"]);
     }
@@ -168,7 +191,7 @@ class TodoController extends Controller
     {
         try{
             $todo->tags()->detach();
-            $todo->accounts()->detach();
+            $todo->users()->detach();
             $todo->delete();
             return redirect()->route('todos.index')->with('status',
             'Successfully deleted todo!');
@@ -178,11 +201,6 @@ class TodoController extends Controller
             $msg = 'Failed to delete todo!'. $e;
             return redirect()->route('todos.index')->with('error', $msg);
         }
-    }
-
-    public function showTodo() {
-        $todo = Todo::all();
-        dd($todo);
     }
 
     public function searchTodo(Request $request){

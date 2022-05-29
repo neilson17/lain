@@ -25,6 +25,7 @@
             </div>
         </div>
     </div>
+    @can('admin-only')
     <div class="d-flex justify-content-end">
         <a class="btn btn-normal" href="{{url('/clients/'.$data->id.'/edit')}}">Edit</a>
         <form method="POST" class="m-0 d-flex" id="delete-client-detail" action="{{url('clients/'.$data->id)}}">
@@ -33,6 +34,7 @@
             <a id="btn-delete-client-detail" class="ml-10x btn btn-warning border-none" href="#">Delete</a>
         </form>
     </div>
+    @endcan
     <div class="divider mb-15x mt-15x"></div>
     <p class="font-14x">{!! nl2br($data->description) !!}</p>
     <div class="d-flex mt-15x contact-client-detail">
@@ -202,6 +204,7 @@
         @endforeach
     </div>
 </div>
+@can('admin-only')
 <div class="card p-20x mt-15x">
     <div class="d-flex mb-15x card-header-client-detail">
         <h3 class="card-title-client-detail">Finances</h3>
@@ -260,6 +263,7 @@
         <a class="btn-normal btn" href="{{route('transactions.create')}}">Add Transaction</a>
     </p>
 </div>
+@endcan
 @endsection
 
 @section('javascript')

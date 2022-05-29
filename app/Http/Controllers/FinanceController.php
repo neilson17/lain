@@ -17,6 +17,7 @@ class FinanceController extends Controller
      */
     public function index()
     {
+        $this->authorize('admin-only');
         $trans = Transaction::orderBy('date', 'desc')->get();
         $bankacc = BankAccount::all();
         $target = Target::all();

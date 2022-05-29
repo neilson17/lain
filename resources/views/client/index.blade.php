@@ -7,7 +7,9 @@
         @csrf
         <input type="text" id="inpsearchclient" class="input-text-merged-button">
         <a class="btn-merged-input btn" id="btn-search-client" href="#">Search</a>
+        @can('admin-only')
         <a class="btn-normal btn ml-10x" href="{{route('clients.create')}}">Add Client</a>
+        @endcan
     </div>
 </div>
 @if(session('status'))

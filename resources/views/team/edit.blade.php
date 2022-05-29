@@ -2,7 +2,7 @@
 
 @section('content')
 <h2 class="ml-20x">Edit Staff - {{$data->name}}</h2>
-<form role="form" method="POST" action="{{url('teams/'.$data->username)}}" enctype="multipart/form-data">
+<form role="form" method="POST" action="{{url('teams/'.$data->id)}}" enctype="multipart/form-data">
 @csrf
 @method("PUT")
     <div class="d-flex justify-content-space-evenly mt-15x edit-team-wrapper">
@@ -13,8 +13,8 @@
         <div class="d-flex flex-dir-col form-edit-team-wrapper">
             <div class="w-100p">
                 <p class="font-14x">Username</p>
-                <input type="text" class="input-text mt-3x w-100p" disabled value="{{ $data->username }}">
-                <input type="hidden" value="{{ $data->username }}" name="username">
+                <input type="text" class="input-text mt-3x w-100p" disabled value="{{ $data->email }}">
+                <input type="hidden" value="{{ $data->id }}" name="id_user">
             </div>
             <div class="w-100p mt-15x">
                 <p class="font-14x">Name</p>
@@ -31,7 +31,7 @@
             <div class="divider mt-15x"></div>
             <div class="w-100p mt-15x">
                 <p class="font-14x">Email</p>
-                <input type="text" class="input-text mt-3x w-100p" name="email" value="{{ $data->email }}">
+                <input type="text" class="input-text mt-3x w-100p" name="email" value="{{ $data->email_email }}">
             </div>
             <div class="w-100p mt-15x">
                 <p class="font-14x">Phone Number</p>

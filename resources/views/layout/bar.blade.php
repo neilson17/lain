@@ -22,6 +22,7 @@
                         <h3 class="text-list-sidebar">Dashboard</h3>
                     </div>
                 </a>
+                @can('admin-only')
                 <a href="{{url('/teams')}}" class="@yield('team-active')">
                     <div class="sidebar-list-item d-flex">
                     <div class="icon-list-sidebar-wrapper">
@@ -38,6 +39,7 @@
                         <h3 class="text-list-sidebar">Finance</h3>
                     </div>
                 </a>
+                @endcan
                 <a href="{{url('/clients')}}" class="@yield('client-active')">
                     <div class="sidebar-list-item d-flex">
                         <div class="icon-list-sidebar-wrapper">
@@ -80,7 +82,8 @@
                         <h3 class="text-list-sidebar">Settings</h3>
                     </div>
                 </a>
-                <a href="{{url('/api/logout')}}">
+                <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                document.getElementById('logout-form').submit();">
                     <div class="sidebar-list-item d-flex">
                         <div class="icon-list-sidebar-wrapper">
                             <img src="{{asset('assets/icons/icon-7.png')}}" class="icon-list-sidebar" alt="">
@@ -88,6 +91,9 @@
                         <h3 class="text-list-sidebar">Logout</h3>
                     </div>
                 </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
             </div>
         </div>
     </div>
@@ -97,10 +103,18 @@
                 <img src="{{asset('assets/icons/icon-10.png')}}" id="hamburger-menu" class="icon-list-sidebar" alt="">
                 <div class="d-flex img-top-bar">
                     <div class="account-info-header d-flex">
-                        <h3>username</h3>
-                        <p>role</p>
+                        <h3>
+                            @if(Auth::user())
+                            {{ Auth::user()->name }}
+                            @endif
+                        </h3>
+                        <p>
+                            @if(Auth::user())
+                            {{ Auth::user()->role }}
+                            @endif
+                        </p>
                     </div>
-                    <img class="img-avatar h-100p" src="https://i.pravatar.cc/300" alt="">
+                    <img class="img-avatar h-100p" src={{ asset('assets/img/'. Auth::user()->photo_url )}} alt="">
                 </div>
             </div>
         </div>

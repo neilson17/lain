@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Account;
 use App\Todo;
 use App\Event;
@@ -31,8 +32,11 @@ class DashboardController extends Controller
             array_push($clients, $temp);
         }
 
-        $todos = Todo::where('done', 0)
-            ->orderBy('deadline')
+        $todos = DB::table('todos as t')->join('account_todo as at', 'at.todo_id', '=', 't.id')
+            ->join('clients as c', 't.clients_id', '=', 'c.id')
+            ->where([['t.done', 0], ['at.user_id', Auth::id()]])
+            ->select('t.*', 'c.name as client_name', 'c.photo_url')
+            ->orderBy('t.deadline')
             ->limit(5)
             ->get();
 

@@ -31,12 +31,12 @@
                         </div>
                     </div>
                     <div class="d-flex">
-                        <a class="btn btn-normal" href="{{url('/teams/'.$d->username.'/edit')}}">Edit</a>
-                        <form method="POST" class="m-0 d-flex" id="delete-team-{{$d->username}}" action="{{url('teams/deleteaccount')}}">
+                        <a class="btn btn-normal" href="{{url('/teams/'.$d->id.'/edit')}}">Edit</a>
+                        <form method="POST" class="m-0 d-flex" id="delete-team-{{$d->id}}" action="{{url('teams/deleteaccount')}}">
                             @csrf
                             @method('DELETE')
-                            <input type="hidden" name="inpdelusername" value="{{$d->username}}">
-                            <a username="{{$d->username}}" class="btn-delete-team ml-10x btn btn-warning border-none" href="#">Delete</a>
+                            <input type="hidden" name="inpdelusername" value="{{$d->id}}">
+                            <a username="{{$d->id}}" class="btn-delete-team ml-10x btn btn-warning border-none" href="#">Delete</a>
                         </form>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                                 <p class="font-12x text-align-right"><b>Phone</b></p>
                             </div>
                             <div class="d-flex flex-dir-col ml-10x">
-                                <p class="font-12x overflow-wrap-anywhere">{{ $d->email }}</p>
+                                <p class="font-12x overflow-wrap-anywhere">{{ $d->email_email }}</p>
                                 <p class="font-12x">{{ $d->phone_number }}</p>
                             </div>
                         </div> 

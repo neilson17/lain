@@ -27,6 +27,7 @@ class TransactionController extends Controller
      */
     public function create()
     {
+        $this->authorize('admin-only');
         $trans_cat = TransactionCategory::all();
         $client = Client::all();
         $bank_acc = BankAccount::all();
@@ -42,6 +43,7 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('admin-only');
         $request->validate([
             'title' => 'required',
             'amount' => 'required',
@@ -133,6 +135,7 @@ class TransactionController extends Controller
      */
     public function show(Transaction $transaction)
     {
+        $this->authorize('admin-only');
         $data = $transaction;
         // $date = date("d M Y, H.i", strtotime($transaction->deadline));
         return view('transaction.detail', compact("data"));
@@ -146,6 +149,7 @@ class TransactionController extends Controller
      */
     public function edit(Transaction $transaction)
     {
+        $this->authorize('admin-only');
         $client = Client::all();
         $data = $transaction;
 
@@ -161,6 +165,7 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
+        $this->authorize('admin-only');
         $trans = Transaction::find($request->id);
         $bankAcc = BankAccount::find($request->bankAcc);
         $category = $request->category;
@@ -216,6 +221,7 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
+        $this->authorize('admin-only');
         $category = $transaction->transaction_categories_id;
         $bankAcc = BankAccount::find($transaction->bank_accounts_id);
         $update = false;
@@ -264,6 +270,7 @@ class TransactionController extends Controller
     }
 
     public function changeDonePiutang (Request $request){
+        $this->authorize('admin-only');
         $trans = Transaction::find($request->id);
         $bankAcc = BankAccount::find($trans->bank_accounts_id);
 
@@ -282,6 +289,7 @@ class TransactionController extends Controller
     }
 
     public function changeDoneHutang (Request $request){
+        $this->authorize('admin-only');
         $trans = Transaction::find($request->id);
         $bankAcc = BankAccount::find($trans->bank_accounts_id);
 
@@ -305,6 +313,7 @@ class TransactionController extends Controller
     }
     
     public function financeReport(){
+        $this->authorize('admin-only');
         $startDate = date("Y-m-d\TH:i",strtotime("-30 days"));
         $endDate = date("Y-m-d\TH:i",strtotime(date("y-m-d h:i:s")));
         $bankAcc = BankAccount::all();
@@ -312,6 +321,7 @@ class TransactionController extends Controller
     }
 
     public function getReportsContent(Request $request){
+        $this->authorize('admin-only');
         $trans = Transaction::where("bank_accounts_id", "=", $request->bankAcc)
             ->whereBetween('date', [date("Y-m-d H:i:s",strtotime($request->startDate)), date("Y-m-d H:i:s",strtotime($request->endDate))])
             ->orderBy('date', 'asc')

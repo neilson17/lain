@@ -11,7 +11,9 @@ use App\Account;
 use App\Event;
 use App\Note;
 use App\Transaction;
+use App\User;
 use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
@@ -45,6 +47,7 @@ class ClientController extends Controller
      */
     public function create()
     {
+        $this->authorize('admin-only');
         $job_categories = JobCategory::all();
         // dd($job_categories);
         return view('client.add', compact('job_categories'));
@@ -58,6 +61,7 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('admin-only');
         $client = new Client();
         $client->name = $request->get('inpclientname');
         $client->description = $request->get('inpclientdescription');
@@ -93,20 +97,29 @@ class ClientController extends Controller
         $percentage = ($tt != 0) ? round(($td/$tt), 2) : 0;
         $data = $client;
         $date = date("d M Y, H.i", strtotime($client->deadline));
-        $todos = Todo::where('clients_id', '=', $client->id)
-            ->where('done', 0)
-            ->orderBy('deadline')
-            ->get();
+
+        if (Auth::user()->role == "Admin") {
+            $todos = Todo::where('clients_id', '=', $client->id)
+                ->where('done', 0)
+                ->orderBy('deadline')
+                ->get();
+        }
+        else {
+            $todos = Todo::join('account_todo as at', 'at.todo_id', '=', 'id')
+                ->where([['clients_id', '=', $client->id], ['done', 0], ['at.user_id' ,'=', Auth::user()->id]])
+                ->orderBy('deadline')
+                ->get();
+        }
 
         $todos_unfiltered = Todo::where('clients_id', '=', $client->id)->get();
         $accounts = [];
         foreach($todos_unfiltered as $d) {
-            $account = $d->accounts;
+            $account = $d->users;
             foreach($account as $a) {
-                array_push($accounts, $a->username);
+                array_push($accounts, $a->id);
             }
         }
-        $collaborators = Account::find(array_unique($accounts));
+        $collaborators = User::find(array_unique($accounts));
         // dd($collaborators);
 
         $events = Event::where('clients_id', '=', $data->id)
@@ -114,14 +127,19 @@ class ClientController extends Controller
             ->orderBy('date')
             ->get();
 
-        $notes = DB::table('notes as n')->join('clients as c', 'n.clients_id', '=', 'c.id')->where([['accounts_username', '=', 'admin'], ['clients_id', '=', $data->id]])->select('n.*', 'c.name')->get();
+        $private = DB::table('notes as n')
+            ->join('clients as c', 'n.clients_id', '=', 'c.id')
+            ->where([['user_id', '=', Auth::user()->id], ['type', '=', 'private'], ['clients_id', '=', $data->id]])
+            ->select('n.*', 'c.name')
+            ->orderBy('n.date', 'DESC')
+            ->get();
 
-        $public = $private = [];
-
-        foreach($notes as $n) {
-            if ($n->type == "public") array_push($public, $n);
-            else array_push($private, $n);
-        }
+        $public = DB::table('notes as n')
+            ->join('clients as c', 'n.clients_id', '=', 'c.id')
+            ->where([['type', '=', 'public'], ['clients_id', '=', $data->id]])
+            ->select('n.*', 'c.name')
+            ->orderBy('n.date', 'DESC')
+            ->get();
 
         $trans = Transaction::where('clients_id', '=', $client->id)
             ->orderBy('date')
@@ -138,6 +156,7 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
+        $this->authorize('admin-only');
         $data = $client;
         $deadline = date("Y-m-d\TH:i",strtotime($data->deadline));
         return view('client.edit', compact('data', 'deadline'));
@@ -152,6 +171,7 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
+        $this->authorize('admin-only');
         $client->name = $request->get('name');
         $client->description = $request->get('description');
         $client->deadline = date("Y-m-d H:i:s",strtotime($request->get('deadline')));
@@ -182,10 +202,11 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
+        $this->authorize('admin-only');
         try{
             $todos = Todo::where('clients_id', $client->id)->get();
             foreach($todos as $t){
-                $t->accounts()->detach();
+                $t->users()->detach();
                 $t->tags()->detach();
                 $t->delete();
             }
@@ -272,28 +293,57 @@ class ClientController extends Controller
         $client = Client::find($request->client_id);
         $range = $request->range;
 
-        if ($range == 100){
-            $todos = Todo::where('clients_id', '=', $client->id)
-                ->where('deadline', '>=', DB::raw('curdate()'))
-                ->orderBy('deadline')
-                ->get();
-        }
-        else if ($range == 200){
-            $todos = Todo::where('clients_id', '=', $client->id)
-                ->where('done', 0)
-                ->orderBy('deadline')
-                ->get();
-        }
-        else if ($range == 300){
-            $todos = Todo::where('clients_id', '=', $client->id)
-                ->orderBy('deadline')
-                ->get();
+        if (Auth::user()->role == "Admin") {
+            if ($range == 100){
+                $todos = Todo::where('clients_id', '=', $client->id)
+                    ->where('deadline', '>=', DB::raw('curdate()'))
+                    ->orderBy('deadline')
+                    ->get();
+            }
+            else if ($range == 200){
+                $todos = Todo::where('clients_id', '=', $client->id)
+                    ->where('done', 0)
+                    ->orderBy('deadline')
+                    ->get();
+            }
+            else if ($range == 300){
+                $todos = Todo::where('clients_id', '=', $client->id)
+                    ->orderBy('deadline')
+                    ->get();
+            }
+            else {
+                $todos = Todo::where('clients_id', '=', $client->id)
+                    ->whereBetween('deadline', [DB::raw('curdate()'), DB::raw('date_add(curdate(), interval '.$request->range.' day)')])
+                    ->orderBy('deadline')
+                    ->get();
+            }
         }
         else {
-            $todos = Todo::where('clients_id', '=', $client->id)
-                ->whereBetween('deadline', [DB::raw('curdate()'), DB::raw('date_add(curdate(), interval '.$request->range.' day)')])
-                ->orderBy('deadline')
-                ->get();
+            if ($range == 100){
+                $todos = Todo::join('account_todo as at', 'at.todo_id', '=', 'id')
+                    ->where([['deadline', '>=', DB::raw('curdate()')], ['at.user_id' ,'=', Auth::user()->id], ['clients_id', '=', $client->id]])
+                    ->orderBy('deadline')
+                    ->get();
+            }
+            else if ($range == 200){
+                $todos = Todo::join('account_todo as at', 'at.todo_id', '=', 'id')
+                    ->where([['done', 0], ['at.user_id' ,'=', Auth::user()->id], ['clients_id', '=', $client->id]])
+                    ->orderBy('deadline')
+                    ->get();
+            }
+            else if ($range == 300){
+                $todos = Todo::join('account_todo as at', 'at.todo_id', '=', 'id')
+                    ->where([['at.user_id' ,'=', Auth::user()->id], ['clients_id', '=', $client->id]])
+                    ->orderBy('deadline')
+                    ->get();
+            }
+            else {
+                $todos = Todo::join('account_todo as at', 'at.todo_id', '=', 'id')
+                    ->where([['at.user_id' ,'=', Auth::user()->id], ['clients_id', '=', $client->id]])
+                    ->whereBetween('deadline', [DB::raw('curdate()'), DB::raw('date_add(curdate(), interval '.$request->range.' day)')])
+                    ->orderBy('deadline')
+                    ->get();
+            }
         }
 
         $elements = "";
@@ -323,10 +373,5 @@ class ClientController extends Controller
         $elements =  view("transaction.reportContent", compact("trans"))->render();
 
         return response()->json(['success'=>'Successfully updated range on transaction', 'elements'=>$elements]);
-    }
-
-    public function showClient() {
-        $client = Client::all();
-        dd($client);
     }
 }
